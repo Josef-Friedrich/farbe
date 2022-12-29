@@ -1,5 +1,6 @@
-# xcolor.lua
-LaTeX xcolor package for Lua
+# luafarbe
+
+Color manangement for LuaTex
 
 Color related lua code:
 
