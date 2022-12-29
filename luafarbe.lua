@@ -1199,6 +1199,26 @@ local function load_main_color_class()
     return color ~= nil and color.__is_color == true
   end
 
+  function Color:pdf_colorstack_string()
+    return table.concat({
+      self.r,
+      self.g,
+      self.b,
+      'rg',
+      self.r,
+      self.g,
+      self.b,
+      'RG',
+    }, ' ')
+  end
+
+  function Color:write_pdf_colorstack_node()
+    local whatsit = node.new('whatsit', 'pdf_colorstack')
+    whatsit.stack = 0
+    whatsit.data = self:pdf_colorstack_string()
+    node.write(whatsit)
+  end
+
   return Color
 
 end
@@ -1207,7 +1227,8 @@ local Color = load_main_color_class()
 
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 
-local svgName = {
+local colors = {
+  -- svg
   AliceBlue = { 0.94, 0.972, 0.972 },
   AntiqueWhite = { 0.98, 0.92, 0.92 },
   Aqua = { 0, 1, 1 },
@@ -1359,9 +1380,8 @@ local svgName = {
   WhiteSmoke = { 0.96, 0.96, 0.96 },
   Yellow = { 1, 1, 1 },
   YellowGreen = { 0.604, 0.804, 0.804 },
-}
 
-local x11names = {
+  --- x11
   AntiqueWhite1 = { 1, 0.936, 0.936 },
   AntiqueWhite2 = { 0.932, 0.875, 0.875 },
   AntiqueWhite3 = { 0.804, 0.752, 0.752 },
@@ -1681,34 +1701,10 @@ local x11names = {
   Purple0 = { 0.628, 0.125, 0.125 },
 }
 
-local color = Color '#ff0044'
-
--- Print color
-print(color) -- prints: #ff0000
-
--- Print color as hsv
-local h, s, v = color:hsv()
-print(h * 360, s * 100, v * 100) -- prints: 0 100 100
-print(color:tostring 'hsv') -- prints: hsv(0, 100%, 100%)
-
--- Print color as hwb
-local h, w, b = color:hsv()
-print(h * 360, w * 100, b * 100) -- prints: 0 0 0
-print(color:tostring 'hwb') -- prints: hwb(0, 0%, 0%)
-
--- Print color as hsla
-local h, s, l, a = color:hsla()
-print(h * 360, s * 100, l * 100, a) -- prints: 0 100 50 1
-print(color:tostring 'hsla') -- prints: hsla(0, 100%, 50%, 1)
-
--- Print color as rgba
-local r, g, b, a = color:rgba()
-print(r * 255, g * 255, b * 255, a) -- prints: 255 0 0 1
-print(color:tostring 'rgba') -- prints: rgba(255, 0, 0, 1)
-
--- Print color as cmyk
-print(color:cmyk()) -- prints: 0 1 1 0
-print(color:tostring 'cmyk') -- prints: cmyk(0%, 100%, 100%, 0%)
-
--- Print color as NCol
-print(color:tostring 'ncol') -- prints: R0, 0%, 0%
+return {
+  print_pdf_colorstack_node = function(color_name)
+    local rgb = colors[color_name]
+    local color = Color({ r = rgb[1], g = rgb[2], b = rgb[3] })
+    color:write_pdf_colorstack_node()
+  end,
+}

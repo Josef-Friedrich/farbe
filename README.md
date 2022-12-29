@@ -1,5 +1,7 @@
 # luafarbe
 
+Based on https://luarocks.org/modules/Firanel/lua-color
+
 Color manangement for LuaTex
 
 Color related lua code:
