@@ -1711,9 +1711,9 @@ end
 local Color = load_main_color_class()
 
 return {
-  print_pdf_colorstack_node = function(color_name)
-    local rgb = colors[color_name]
-    local color = Color({ r = rgb[1], g = rgb[2], b = rgb[3] })
+  Color = Color,
+  print_pdf_colorstack_node = function(color_spec)
+    local color = Color(color_spec)
     color:write_pdf_colorstack_node()
   end,
 }
