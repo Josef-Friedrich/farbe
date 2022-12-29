@@ -1,7 +1,5 @@
-
 --- https://luarocks.org/modules/Firanel/lua-color
 --- Copyright (c) 2021 Firanel
-
 ---https://github.com/Firanel/lua-color/blob/master/util/bitwise.lua
 local function load_bitwise_functions()
   -- Implementations of bitwise operators so that lua-color can be used
@@ -110,13 +108,13 @@ local function load_class_function()
   --
 
   local function class(base, init, defaults)
-    local c = defaults or {}    -- a new class instance
+    local c = defaults or {} -- a new class instance
     if not init and type(base) == 'function' then
       init = base
       base = nil
     elseif type(base) == 'table' then
-    -- our new class is a shallow copy of the base class!
-      for i,v in pairs(base) do
+      -- our new class is a shallow copy of the base class!
+      for i, v in pairs(base) do
         c[i] = v
       end
       c._base = base
@@ -129,13 +127,13 @@ local function load_class_function()
     local mt = {}
     mt.__call = function(class_tbl, ...)
       local obj = {}
-      setmetatable(obj,c)
+      setmetatable(obj, c)
       if init then
-        init(obj,...)
+        init(obj, ...)
       else
         -- make sure that any stuff from the base class is initialized!
         if base and base.init then
-        base.init(obj, ...)
+          base.init(obj, ...)
         end
       end
       return obj
@@ -144,7 +142,9 @@ local function load_class_function()
     c.is_a = function(self, klass)
       local m = getmetatable(self)
       while m do
-        if m == klass then return true end
+        if m == klass then
+          return true
+        end
         m = m._base
       end
       return false
@@ -160,7 +160,7 @@ end
 local function load_utils_functions()
   local function min_ind(first, ...)
     local min, ind = first, 1
-    for i, v in ipairs {...} do
+    for i, v in ipairs { ... } do
       if v < min then
         min, ind = v, i + 1
       end
@@ -170,7 +170,7 @@ local function load_utils_functions()
 
   local function max_ind(first, ...)
     local max, ind = first, 1
-    for i, v in ipairs {...} do
+    for i, v in ipairs { ... } do
       if v > max then
         max, ind = v, i + 1
       end
@@ -245,7 +245,7 @@ local function load_main_color_class()
   end
 
   local function tonumPercent(str)
-    if str:sub(-1) == "%" then
+    if str:sub(-1) == '%' then
       return tonumber(str:sub(1, #str - 1)) / 100
     end
     return tonumber(str)
@@ -274,17 +274,11 @@ local function load_main_color_class()
   -- @field a
 
   --- Color class
-  local Color = class(nil, function (this, value)
+  local Color = class(nil, function(this, value)
     if value then
       this:set(value)
     end
-  end, {
-    __is_color = true,
-    r = 0,
-    g = 0,
-    b = 0,
-    a = 1,
-  })
+  end, { __is_color = true, r = 0, g = 0, b = 0, a = 1 })
 
   --- Table of color names.
   -- <br>
@@ -295,7 +289,7 @@ local function load_main_color_class()
   -- Default: `nil`
   --
   -- @usage  Color.colorNames = { red = "#ff0000", green = "#00ff00", blue = "#0000ff" }
-  --local color = Color "green"
+  -- local color = Color "green"
   Color.colorNames = nil
 
   --- Clone color
@@ -379,87 +373,98 @@ local function load_main_color_class()
       self.b = value.b
       self.a = value.a
 
-    elseif type(value) == "string" then
+    elseif type(value) == 'string' then
       self.a = 1
 
-      if value:sub(1, 1) ~= "#" then
+      if value:sub(1, 1) ~= '#' then
         if Color.colorNames then
           local c = Color.colorNames[value]
-          if c then return self:set(c) end
+          if c then
+            return self:set(c)
+          end
         end
 
-        local func, values = value:match "(%w+)[ %(]+([x ,.%x%%]+)"
+        local func, values = value:match '(%w+)[ %(]+([x ,.%x%%]+)'
         if func ~= nil then
-          if func == "rgb" then
-            local r, g, b = values:match "([x.%x]+)[ ,]+([x.%x]+)[ ,]+([x.%x]+)"
+          if func == 'rgb' then
+            local r, g, b =
+              values:match '([x.%x]+)[ ,]+([x.%x]+)[ ,]+([x.%x]+)'
             assert(r and g and b)
             self.r = tonumber(r) / 0xff
             self.g = tonumber(g) / 0xff
             self.b = tonumber(b) / 0xff
             return self
-          elseif func == "rgba" then
-            local r, g, b, a = values:match "([x.%x]+)[ ,]+([x.%x]+)[ ,]+([x.%x]+)[ ,]+([x.%x]+%%?)"
+          elseif func == 'rgba' then
+            local r, g, b, a =
+              values:match '([x.%x]+)[ ,]+([x.%x]+)[ ,]+([x.%x]+)[ ,]+([x.%x]+%%?)'
             assert(r and g and b and a)
             self.r = tonumber(r) / 0xff
             self.g = tonumber(g) / 0xff
             self.b = tonumber(b) / 0xff
             self.a = tonumPercent(a)
             return self
-          elseif func == "hsv" then
-            local h, s, v = values:match "([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'hsv' then
+            local h, s, v =
+              values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(h and s and v)
-            return self:set {
+            return self:set{
               h = tonumber(h) / 360,
               s = tonumPercent(s),
               v = tonumPercent(v),
             }
-          elseif func == "hsva" then
-            local h, s, v, a = values:match "([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'hsva' then
+            local h, s, v, a =
+              values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(h and s and v and a)
-            return self:set {
+            return self:set{
               h = tonumber(h) / 360,
               s = tonumPercent(s),
               v = tonumPercent(v),
-              a = tonumPercent(a)
+              a = tonumPercent(a),
             }
-          elseif func == "hsl" then
-            local h, s, l = values:match "([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'hsl' then
+            local h, s, l =
+              values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(h and s and l)
-            return self:set {
+            return self:set{
               h = tonumber(h) / 360,
               s = tonumPercent(s),
               l = tonumPercent(l),
             }
-          elseif func == "hsla" then
-            local h, s, v, a = values:match "([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'hsla' then
+            local h, s, v, a =
+              values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(h and s and v and a)
-            return self:set {
+            return self:set{
               h = tonumber(h) / 360,
               s = tonumPercent(s),
               l = tonumPercent(l),
-              a = tonumPercent(a)
+              a = tonumPercent(a),
             }
-          elseif func == "hwb" then
-            local h, w, b = values:match "([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'hwb' then
+            local h, w, b =
+              values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(h and w and b)
-            return self:set {
+            return self:set{
               h = tonumber(h) / 360,
               w = tonumPercent(w),
               b = tonumPercent(b),
             }
-          elseif func == "hwba" then
-            local h, w, b, a = values:match "([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'hwba' then
+            local h, w, b, a =
+              values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(h and w and b and a)
-            return self:set {
+            return self:set{
               h = tonumber(h) / 360,
               w = tonumPercent(w),
               b = tonumPercent(b),
-              a = tonumPercent(a)
+              a = tonumPercent(a),
             }
-          elseif func == "cmyk" then
-            local c, m, y, k = values:match "([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          elseif func == 'cmyk' then
+            local c, m, y, k =
+              values:match '([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
             assert(c and m and y and k)
-            return self:set {
+            return self:set{
               c = tonumPercent(c),
               m = tonumPercent(m),
               y = tonumPercent(y),
@@ -467,28 +472,39 @@ local function load_main_color_class()
             }
           end
         else
-          local col, dist, w, b, a = value:match "([RGBCMYrgbcmy])(%d*)[, ]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+          local col, dist, w, b, a =
+            value:match '([RGBCMYrgbcmy])(%d*)[, ]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
           if col == nil then
-            col, dist, w, b, a = value:match "([RGBCMYrgbcmy])(%d*)[, ]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)"
+            col, dist, w, b, a =
+              value:match '([RGBCMYrgbcmy])(%d*)[, ]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
           end
           if col then
             col = col:lower()
 
             local h
-            if     col == "r" then h = 0
-            elseif col == "y" then h = 1/6
-            elseif col == "g" then h = 2/6
-            elseif col == "c" then h = 3/6
-            elseif col == "b" then h = 4/6
-            elseif col == "m" then h = 5/6 end
+            if col == 'r' then
+              h = 0
+            elseif col == 'y' then
+              h = 1 / 6
+            elseif col == 'g' then
+              h = 2 / 6
+            elseif col == 'c' then
+              h = 3 / 6
+            elseif col == 'b' then
+              h = 4 / 6
+            elseif col == 'm' then
+              h = 5 / 6
+            end
 
-            if #dist > 0 then h = h + tonumber(dist) / 600 end
+            if #dist > 0 then
+              h = h + tonumber(dist) / 600
+            end
 
-            return self:set {
+            return self:set{
               h = h,
               w = tonumPercent(w),
               b = tonumPercent(b),
-              a = a and tonumPercent(a) or 1
+              a = a and tonumPercent(a) or 1,
             }
           end
         end
@@ -499,26 +515,26 @@ local function load_main_color_class()
       local pattern
       local div = 0xff
       if #value == 3 then
-        pattern = "(%x)(%x)(%x)"
+        pattern = '(%x)(%x)(%x)'
         div = 0xf
       elseif #value == 4 then
-        pattern = "(%x)(%x)(%x)(%x)"
+        pattern = '(%x)(%x)(%x)(%x)'
         div = 0xf
       elseif #value == 6 then
-        pattern = "(%x%x)(%x%x)(%x%x)"
+        pattern = '(%x%x)(%x%x)(%x%x)'
       elseif #value == 8 then
-        pattern = "(%x%x)(%x%x)(%x%x)(%x%x)"
+        pattern = '(%x%x)(%x%x)(%x%x)(%x%x)'
       else
-        error "Not a valid color"
+        error 'Not a valid color'
       end
       local r, g, b, a = value:match(pattern)
-      assert(r ~= nil, "Not a valid color")
+      assert(r ~= nil, 'Not a valid color')
       self.r = tonumber(r, 16) / div
       self.g = tonumber(g, 16) / div
       self.b = tonumber(b, 16) / div
       self.a = a ~= nil and tonumber(a, 16) / div.a or 1
 
-    -- table with rgb
+      -- table with rgb
     elseif value[1] ~= nil then
       self.r = value[1]
       self.g = value[2]
@@ -537,7 +553,7 @@ local function load_main_color_class()
       self.b = (1 - value.y) * k
       self.a = 1
 
-    -- table with hs[vl]
+      -- table with hs[vl]
     elseif value.h ~= nil then
       if value.w ~= nil then -- hwb
         value.v = 1 - value.b
@@ -566,46 +582,64 @@ local function load_main_color_class()
       self.a = value.a or self.a or 1
 
     else -- Single set mode
-      if value.red then self.r = value.red end
-      if value.green then self.g = value.green end
-      if value.blue then self.b = value.blue end
-      if value.alpha then self.a = value.alpha end
+      if value.red then
+        self.r = value.red
+      end
+      if value.green then
+        self.g = value.green
+      end
+      if value.blue then
+        self.b = value.blue
+      end
+      if value.alpha then
+        self.a = value.alpha
+      end
 
       if value.lightness then
         local h, s, l = self:hsl()
-        self:set {h= value.hue or h, s= value.saturation or s, l= value.lightness or l}
+        self:set{
+          h = value.hue or h,
+          s = value.saturation or s,
+          l = value.lightness or l,
+        }
         value.hue = nil
         value.saturation = nil
       end
 
       if value.whiteness or value.blackness then
         local h, w, b = self:hwb()
-        self:set {h= value.hue or h, w= value.whiteness or w, b= value.backness or b}
+        self:set{
+          h = value.hue or h,
+          w = value.whiteness or w,
+          b = value.backness or b,
+        }
         value.hue = nil
       end
 
       if value.hue or value.saturation or value.value then
         local h, s, v = self:hsv()
-        self:set {h= value.hue or h, s= value.saturation or s, v= value.value or v}
+        self:set{
+          h = value.hue or h,
+          s = value.saturation or s,
+          v = value.value or v,
+        }
       end
 
       if value.cyan or value.magenta or value.yellow or value.key then
         local c, m, y, k = self:cmyk()
-        self:set {
+        self:set{
           c = value.cyan or c,
           m = value.magenta or m,
           y = value.yellow or y,
-          k = value.key or k
+          k = value.key or k,
         }
       end
     end
 
-    local r, g, b, a =
-      utils.clamp(self.r, 0, 1),
-      utils.clamp(self.g, 0, 1),
-      utils.clamp(self.b, 0, 1),
+    local r, g, b, a = utils.clamp(self.r, 0, 1),
+      utils.clamp(self.g, 0, 1), utils.clamp(self.b, 0, 1),
       utils.clamp(self.a, 0, 1)
-    assert(r and g and b and a, "Color invalid")
+    assert(r and g and b and a, 'Color invalid')
     return self
   end
 
@@ -639,7 +673,7 @@ local function load_main_color_class()
     if chroma == 0 then
       hue = 0
     elseif max_i == 1 then
-      hue = (    (g - b) / chroma) / 6
+      hue = ((g - b) / chroma) / 6
     elseif max_i == 2 then
       hue = (2 + (b - r) / chroma) / 6
     elseif max_i == 3 then
@@ -681,8 +715,8 @@ local function load_main_color_class()
     local hue, _, max, min = self:_hsvm()
     local lightness = (max + min) / 2
 
-    local saturation = lightness == 0 and 0
-      or (max - lightness) / math.min(lightness, 1 - lightness)
+    local saturation = lightness == 0 and 0 or (max - lightness) /
+                         math.min(lightness, 1 - lightness)
 
     if saturation ~= saturation then
       saturation = 0
@@ -752,19 +786,19 @@ local function load_main_color_class()
   -- @usage color:rotate {rad=math.pi}
   function Color:rotate(value)
     local r
-    if type(value) == "number" then
+    if type(value) == 'number' then
       r = value
     elseif value.rad ~= nil then
       r = value.rad / (math.pi * 2)
     elseif value.deg ~= nil then
       r = value.deg / 360
     else
-      error("No valid argument")
+      error('No valid argument')
     end
 
     local h, s, v = self:hsv()
     h = (h + r) % 1
-    self:set {h = h, s = s, v = v, a = self.a}
+    self:set{ h = h, s = s, v = v, a = self.a }
 
     return self
   end
@@ -784,7 +818,7 @@ local function load_main_color_class()
   -- @treturn Color self
   function Color:grey()
     local h, _, v = self:hsv()
-    self:set {h=h, s=0, v=v, a=self.a}
+    self:set{ h = h, s = 0, v = v, a = self.a }
     return self
   end
 
@@ -809,7 +843,9 @@ local function load_main_color_class()
   --
   -- @treturn Color self
   function Color:mix(other, strength)
-    if strength == nil then strength = 0.5 end
+    if strength == nil then
+      strength = 0.5
+    end
     self.r = self.r * (1 - strength) + other.r * strength
     self.g = self.g * (1 - strength) + other.g * strength
     self.b = self.b * (1 - strength) + other.b * strength
@@ -831,9 +867,8 @@ local function load_main_color_class()
   -- @treturn Color
   function Color:analogous()
     local h, s, v = self:hsv()
-    return Color {h = (h - 1/12) % 1, s = s, v = v, a = self.a},
-      self,
-      Color {h = (h + 1/12) % 1, s = s, v = v, a = self.a}
+    return Color { h = (h - 1 / 12) % 1, s = s, v = v, a = self.a },
+      self, Color { h = (h + 1 / 12) % 1, s = s, v = v, a = self.a }
   end
 
   --- Generate triadic color scheme.
@@ -844,8 +879,8 @@ local function load_main_color_class()
   function Color:triad()
     local h, s, v = self:hsv()
     return self,
-      Color {h = (h + 1/3) % 1, s = s, v = v, a = self.a},
-      Color {h = (h + 2/3) % 1, s = s, v = v, a = self.a}
+      Color { h = (h + 1 / 3) % 1, s = s, v = v, a = self.a },
+      Color { h = (h + 2 / 3) % 1, s = s, v = v, a = self.a }
   end
 
   --- Generate tetradic color scheme.
@@ -857,9 +892,9 @@ local function load_main_color_class()
   function Color:tetrad()
     local h, s, v = self:hsv()
     return self,
-      Color {h = (h + 1/4) % 1, s = s, v = v, a = self.a},
-      Color {h = (h + 2/4) % 1, s = s, v = v, a = self.a},
-      Color {h = (h + 3/4) % 1, s = s, v = v, a = self.a}
+      Color { h = (h + 1 / 4) % 1, s = s, v = v, a = self.a },
+      Color { h = (h + 2 / 4) % 1, s = s, v = v, a = self.a },
+      Color { h = (h + 3 / 4) % 1, s = s, v = v, a = self.a }
   end
 
   --- Generate compound color scheme.
@@ -881,10 +916,10 @@ local function load_main_color_class()
   --
   -- @treturn {Color,...} Table with n colors including self at index 1
   function Color:evenlySpaced(n, r)
-    assert(n > 0, "n needs to be greater than 0")
+    assert(n > 0, 'n needs to be greater than 0')
     r = r or 1
 
-    local res = {self}
+    local res = { self }
 
     local rot = r / n
     local h, s, v = self:hsv()
@@ -892,7 +927,7 @@ local function load_main_color_class()
 
     for i = 1, n - 1 do
       h = (h + rot) % 1
-      table.insert(res, Color {h=h, s=s, v=v, a=a})
+      table.insert(res, Color { h = h, s = s, v = v, a = a })
     end
 
     return res
@@ -909,94 +944,92 @@ local function load_main_color_class()
   --
   -- @see Color:__tostring
   function Color:tostring(format)
-    if format == nil then return tostring(self) end
+    if format == nil then
+      return tostring(self)
+    end
 
     format = format:lower()
 
-    if format:sub(1,1) == "#" then
+    if format:sub(1, 1) == '#' then
       if #format == 4 then
-        return string.format("#%x%x%x", utils.round(self.r * 0xf),
+        return string.format('#%x%x%x', utils.round(self.r * 0xf),
           utils.round(self.g * 0xf), utils.round(self.b * 0xf))
       elseif #format == 5 then
-        return string.format("#%x%x%x%x", utils.round(self.r * 0xf),
-          utils.round(self.g * 0xf), utils.round(self.b * 0xf), utils.round(self.a * 0xf))
+        return string.format('#%x%x%x%x', utils.round(self.r * 0xf),
+          utils.round(self.g * 0xf), utils.round(self.b * 0xf),
+          utils.round(self.a * 0xf))
       elseif #format == 7 then
-        return string.format("#%02x%02x%02x", utils.round(self.r * 0xff),
-          utils.round(self.g * 0xff), utils.round(self.b * 0xff))
+        return string.format('#%02x%02x%02x',
+          utils.round(self.r * 0xff), utils.round(self.g * 0xff),
+          utils.round(self.b * 0xff))
       elseif #format == 9 then
-        return string.format("#%02x%02x%02x%02x", utils.round(self.r * 0xff),
-          utils.round(self.g * 0xff), utils.round(self.b * 0xff), utils.round(self.a * 0xff))
+        return string.format('#%02x%02x%02x%02x',
+          utils.round(self.r * 0xff), utils.round(self.g * 0xff),
+          utils.round(self.b * 0xff), utils.round(self.a * 0xff))
       end
-    elseif format == "rgb" then
-      return string.format("rgb(%d, %d, %d)",
-        utils.round(self.r * 0xff),
-        utils.round(self.g * 0xff),
+    elseif format == 'rgb' then
+      return string.format('rgb(%d, %d, %d)',
+        utils.round(self.r * 0xff), utils.round(self.g * 0xff),
         utils.round(self.b * 0xff))
-    elseif format == "rgba" then
-      return string.format("rgba(%d, %d, %d, %s)",
-        utils.round(self.r * 0xff),
-        utils.round(self.g * 0xff),
+    elseif format == 'rgba' then
+      return string.format('rgba(%d, %d, %d, %s)',
+        utils.round(self.r * 0xff), utils.round(self.g * 0xff),
         utils.round(self.b * 0xff), self.a)
-    elseif format == "hsv" then
+    elseif format == 'hsv' then
       local h, s, v = self:hsv()
-      return string.format("hsv(%d, %d%%, %d%%)",
-        utils.round(h * 360),
-        utils.round(s * 100),
-        utils.round(v * 100))
-    elseif format == "hsva" then
+      return string.format('hsv(%d, %d%%, %d%%)', utils.round(h * 360),
+        utils.round(s * 100), utils.round(v * 100))
+    elseif format == 'hsva' then
       local h, s, v, a = self:hsva()
-      return string.format("hsva(%d, %d%%, %d%%, %s)",
-        utils.round(h * 360),
-        utils.round(s * 100),
+      return string.format('hsva(%d, %d%%, %d%%, %s)',
+        utils.round(h * 360), utils.round(s * 100),
         utils.round(v * 100), a)
-    elseif format == "hsl" then
+    elseif format == 'hsl' then
       local h, s, l = self:hsl()
-      return string.format("hsl(%d, %d%%, %d%%)",
-        utils.round(h * 360),
-        utils.round(s * 100),
-        utils.round(l * 100))
-    elseif format == "hsla" then
+      return string.format('hsl(%d, %d%%, %d%%)', utils.round(h * 360),
+        utils.round(s * 100), utils.round(l * 100))
+    elseif format == 'hsla' then
       local h, s, l, a = self:hsla()
-      return string.format("hsla(%d, %d%%, %d%%, %s)",
-        utils.round(h * 360),
-        utils.round(s * 100),
+      return string.format('hsla(%d, %d%%, %d%%, %s)',
+        utils.round(h * 360), utils.round(s * 100),
         utils.round(l * 100), a)
-    elseif format == "hwb" then
+    elseif format == 'hwb' then
       local h, w, b = self:hwb()
-      return string.format("hwb(%d, %d%%, %d%%)",
-        utils.round(h * 360),
-        utils.round(w * 100),
-        utils.round(b * 100))
-    elseif format == "hwba" then
+      return string.format('hwb(%d, %d%%, %d%%)', utils.round(h * 360),
+        utils.round(w * 100), utils.round(b * 100))
+    elseif format == 'hwba' then
       local h, w, b, a = self:hwba()
-      return string.format("hwba(%d, %d%%, %d%%, %s)",
-        utils.round(h * 360),
-        utils.round(w * 100),
+      return string.format('hwba(%d, %d%%, %d%%, %s)',
+        utils.round(h * 360), utils.round(w * 100),
         utils.round(b * 100), a)
-    elseif format == "ncol" then
+    elseif format == 'ncol' then
       local h, w, b = self:hwb()
       local h_maj, h_min = math.modf(h * 6)
       h_maj = h_maj % 6
 
       local col
-      if h_maj == 0 then col = "R"
-      elseif h_maj == 1 then col = "Y"
-      elseif h_maj == 2 then col = "G"
-      elseif h_maj == 3 then col = "C"
-      elseif h_maj == 4 then col = "B"
-      else col = "M" end
+      if h_maj == 0 then
+        col = 'R'
+      elseif h_maj == 1 then
+        col = 'Y'
+      elseif h_maj == 2 then
+        col = 'G'
+      elseif h_maj == 3 then
+        col = 'C'
+      elseif h_maj == 4 then
+        col = 'B'
+      else
+        col = 'M'
+      end
 
-      return string.format("%s%d, %d%%, %d%%",
-        col, utils.round(h_min * 100),
-        utils.round(w * 100),
+      return string.format('%s%d, %d%%, %d%%', col,
+        utils.round(h_min * 100), utils.round(w * 100),
         utils.round(b * 100))
-    elseif format == "cmyk" then
+    elseif format == 'cmyk' then
       local c, m, y, k = self:cmyk()
-      return string.format("cymk(%d%%, %d%%, %d%%, %d%%)",
-        utils.round(c * 100),
-        utils.round(m * 100),
-        utils.round(y * 100),
-        utils.round(k * 100))
+      return string.format('cymk(%d%%, %d%%, %d%%, %d%%)',
+        utils.round(c * 100), utils.round(m * 100),
+        utils.round(y * 100), utils.round(k * 100))
     end
 
     return tostring(self)
@@ -1011,20 +1044,12 @@ local function load_main_color_class()
   -- @see Color:tostring
   function Color:__tostring()
     if self.a < 1 then
-      return string.format(
-        "#%02x%02x%02x%02x",
-        utils.round(self.r * 0xff),
-        utils.round(self.g * 0xff),
-        utils.round(self.b * 0xff),
-        utils.round(self.a * 0xff)
-      )
+      return string.format('#%02x%02x%02x%02x',
+        utils.round(self.r * 0xff), utils.round(self.g * 0xff),
+        utils.round(self.b * 0xff), utils.round(self.a * 0xff))
     else
-      return string.format(
-        "#%02x%02x%02x",
-        utils.round(self.r * 0xff),
-        utils.round(self.g * 0xff),
-        utils.round(self.b * 0xff)
-      )
+      return string.format('#%02x%02x%02x', utils.round(self.r * 0xff),
+        utils.round(self.g * 0xff), utils.round(self.b * 0xff))
     end
   end
 
@@ -1034,10 +1059,9 @@ local function load_main_color_class()
   --
   -- @treturn boolean all values are equal
   function Color:__eq(other)
-    return self.r == other.r
-      and self.g == other.g
-      and self.b == other.b
-      and self.a == other.a
+    return
+      self.r == other.r and self.g == other.g and self.b == other.b and
+        self.a == other.a
   end
 
   --- Checks whether color is darker.
@@ -1068,13 +1092,13 @@ local function load_main_color_class()
   function Color:__pairs()
     local function iter(tbl, k)
       if k == nil then
-        return "r", self.r
-      elseif k == "r" then
-        return "g", self.g
-      elseif k == "g" then
-        return "b", self.b
-      elseif k == "b" then
-        return "a", self.a
+        return 'r', self.r
+      elseif k == 'r' then
+        return 'g', self.g
+      elseif k == 'g' then
+        return 'b', self.b
+      elseif k == 'b' then
+        return 'a', self.a
       end
     end
 
@@ -1097,7 +1121,8 @@ local function load_main_color_class()
   --
   -- @see Color:mix
   function Color.__add(a, b)
-    assert(Color.isColor(a) and Color.isColor(b), "Can only add two colors.")
+    assert(Color.isColor(a) and Color.isColor(b),
+      'Can only add two colors.')
     return Color(a):mix(b)
   end
 
@@ -1111,7 +1136,8 @@ local function load_main_color_class()
   -- @see Color:mix
   -- @see Color.__add
   function Color.__sub(a, b)
-    assert(Color.isColor(a) and Color.isColor(b), "Can only add two colors.")
+    assert(Color.isColor(a) and Color.isColor(b),
+      'Can only add two colors.')
     return Color(a):mix(b):rotate(0.5)
   end
 
@@ -1125,26 +1151,28 @@ local function load_main_color_class()
   -- @usage local new_col = color & 0xff00ff -- get new color without the green channel
   function Color.__band(a, b)
     local color, mask
-    if Color.isColor(a) and type(b) == "number" then
+    if Color.isColor(a) and type(b) == 'number' then
       color = a
       mask = b
-    elseif Color.isColor(b) and type(a) == "number" then
+    elseif Color.isColor(b) and type(a) == 'number' then
       color = b
       mask = a
     elseif Color.isColor(a) and Color.isColor(b) then
       color = a
-      mask = bit_lshift(utils.round(b.r * 0xff), 16)
-        + bit_lshift(utils.round(b.g * 0xff), 8)
-        + utils.round(b.b * 0xff)
+      mask = bit_lshift(utils.round(b.r * 0xff), 16) +
+               bit_lshift(utils.round(b.g * 0xff), 8) +
+               utils.round(b.b * 0xff)
     else
-      error("Required arguments: Color|number,Color|number Received: "..type(a)..","..type(b))
+      error(
+        'Required arguments: Color|number,Color|number Received: ' ..
+          type(a) .. ',' .. type(b))
     end
 
     return Color {
       bit_and(utils.round(color.r * 0xff), bit_rshift(mask, 16)) / 0xff,
-      bit_and(utils.round(color.g * 0xff), bit_rshift(mask,  8)) / 0xff,
-      bit_and(utils.round(color.b * 0xff), mask                ) / 0xff,
-      color.a
+      bit_and(utils.round(color.g * 0xff), bit_rshift(mask, 8)) / 0xff,
+      bit_and(utils.round(color.b * 0xff), mask) / 0xff,
+      color.a,
     }
   end
 
@@ -1157,7 +1185,7 @@ local function load_main_color_class()
   --
   -- @usage local new_col = Color.band(color, 0xff00ff) -- get new color without the green channel
   function Color.band(a, b)
-      return Color.__band(a, b)
+    return Color.__band(a, b)
   end
 
   --- Check whether `color` is a Color.
@@ -1180,481 +1208,480 @@ local Color = load_main_color_class()
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 
 local svgName = {
-  AliceBlue = { .94, .972, .972 },
-  AntiqueWhite = { .98, .92, .92 },
+  AliceBlue = { 0.94, 0.972, 0.972 },
+  AntiqueWhite = { 0.98, 0.92, 0.92 },
   Aqua = { 0, 1, 1 },
-  Aquamarine = { .498, 1, 1 },
-  Azure = { .94, 1, 1 },
-  Beige = { .96, .96, .96 },
-  Bisque = { 1, .894, .894 },
+  Aquamarine = { 0.498, 1, 1 },
+  Azure = { 0.94, 1, 1 },
+  Beige = { 0.96, 0.96, 0.96 },
+  Bisque = { 1, 0.894, 0.894 },
   Black = { 0, 0, 0 },
-  BlanchedAlmond = { 1, .92, .92 },
+  BlanchedAlmond = { 1, 0.92, 0.92 },
   Blue = { 0, 0, 0 },
-  BlueViolet = { .54, .17, .17 },
-  Brown = { .648, .165, .165 },
-  BurlyWood = { .87, .72, .72 },
-  CadetBlue = { .372, .62, .62 },
-  Chartreuse = { .498, 1, 1 },
-  Chocolate = { .824, .41, .41 },
-  Coral = { 1, .498, .498 },
-  CornflowerBlue = { .392, .585, .585 },
-  Cornsilk = { 1, .972, .972 },
-  Crimson = { .864, .08, .08 },
+  BlueViolet = { 0.54, 0.17, 0.17 },
+  Brown = { 0.648, 0.165, 0.165 },
+  BurlyWood = { 0.87, 0.72, 0.72 },
+  CadetBlue = { 0.372, 0.62, 0.62 },
+  Chartreuse = { 0.498, 1, 1 },
+  Chocolate = { 0.824, 0.41, 0.41 },
+  Coral = { 1, 0.498, 0.498 },
+  CornflowerBlue = { 0.392, 0.585, 0.585 },
+  Cornsilk = { 1, 0.972, 0.972 },
+  Crimson = { 0.864, 0.08, 0.08 },
   Cyan = { 0, 1, 1 },
   DarkBlue = { 0, 0, 0 },
-  DarkCyan = { 0, .545, .545 },
-  DarkGoldenrod = { .72, .525, .525 },
-  DarkGray = { .664, .664, .664 },
-  DarkGreen = { 0, .392, .392 },
-  DarkGrey = { .664, .664, .664 },
-  DarkKhaki = { .74, .716, .716 },
-  DarkMagenta = { .545, 0, 0 },
-  DarkOliveGreen = { .332, .42, .42 },
-  DarkOrange = { 1, .55, .55 },
-  DarkOrchid = { .6, .196, .196 },
-  DarkRed = { .545, 0, 0 },
-  DarkSalmon = { .912, .59, .59 },
-  DarkSeaGreen = { .56, .736, .736 },
-  DarkSlateBlue = { .284, .24, .24 },
-  DarkSlateGray = { .185, .31, .31 },
-  DarkSlateGrey = { .185, .31, .31 },
-  DarkTurquoise = { 0, .808, .808 },
-  DarkViolet = { .58, 0, 0 },
-  DeepPink = { 1, .08, .08 },
-  DeepSkyBlue = { 0, .75, .75 },
-  DimGray = { .41, .41, .41 },
-  DimGrey = { .41, .41, .41 },
-  DodgerBlue = { .116, .565, .565 },
-  FireBrick = { .698, .132, .132 },
-  FloralWhite = { 1, .98, .98 },
-  ForestGreen = { .132, .545, .545 },
+  DarkCyan = { 0, 0.545, 0.545 },
+  DarkGoldenrod = { 0.72, 0.525, 0.525 },
+  DarkGray = { 0.664, 0.664, 0.664 },
+  DarkGreen = { 0, 0.392, 0.392 },
+  DarkGrey = { 0.664, 0.664, 0.664 },
+  DarkKhaki = { 0.74, 0.716, 0.716 },
+  DarkMagenta = { 0.545, 0, 0 },
+  DarkOliveGreen = { 0.332, 0.42, 0.42 },
+  DarkOrange = { 1, 0.55, 0.55 },
+  DarkOrchid = { 0.6, 0.196, 0.196 },
+  DarkRed = { 0.545, 0, 0 },
+  DarkSalmon = { 0.912, 0.59, 0.59 },
+  DarkSeaGreen = { 0.56, 0.736, 0.736 },
+  DarkSlateBlue = { 0.284, 0.24, 0.24 },
+  DarkSlateGray = { 0.185, 0.31, 0.31 },
+  DarkSlateGrey = { 0.185, 0.31, 0.31 },
+  DarkTurquoise = { 0, 0.808, 0.808 },
+  DarkViolet = { 0.58, 0, 0 },
+  DeepPink = { 1, 0.08, 0.08 },
+  DeepSkyBlue = { 0, 0.75, 0.75 },
+  DimGray = { 0.41, 0.41, 0.41 },
+  DimGrey = { 0.41, 0.41, 0.41 },
+  DodgerBlue = { 0.116, 0.565, 0.565 },
+  FireBrick = { 0.698, 0.132, 0.132 },
+  FloralWhite = { 1, 0.98, 0.98 },
+  ForestGreen = { 0.132, 0.545, 0.545 },
   Fuchsia = { 1, 0, 0 },
-  Gainsboro = { .864, .864, .864 },
-  GhostWhite = { .972, .972, .972 },
-  Gold = { 1, .844, .844 },
-  Goldenrod = { .855, .648, .648 },
-  Gray = { .5, .5, .5 },
-  Green = { 0, .5, .5 },
-  GreenYellow = { .68, 1, 1 },
-  Grey = { .5, .5, .5 },
-  Honeydew = { .94, 1, 1 },
-  HotPink = { 1, .41, .41 },
-  IndianRed = { .804, .36, .36 },
-  Indigo = { .294, 0, 0 },
+  Gainsboro = { 0.864, 0.864, 0.864 },
+  GhostWhite = { 0.972, 0.972, 0.972 },
+  Gold = { 1, 0.844, 0.844 },
+  Goldenrod = { 0.855, 0.648, 0.648 },
+  Gray = { 0.5, 0.5, 0.5 },
+  Green = { 0, 0.5, 0.5 },
+  GreenYellow = { 0.68, 1, 1 },
+  Grey = { 0.5, 0.5, 0.5 },
+  Honeydew = { 0.94, 1, 1 },
+  HotPink = { 1, 0.41, 0.41 },
+  IndianRed = { 0.804, 0.36, 0.36 },
+  Indigo = { 0.294, 0, 0 },
   Ivory = { 1, 1, 1 },
-  Khaki = { .94, .9, .9 },
-  Lavender = { .9, .9, .9 },
-  LavenderBlush = { 1, .94, .94 },
-  LawnGreen = { .488, .99, .99 },
-  LemonChiffon = { 1, .98, .98 },
-  LightBlue = { .68, .848, .848 },
-  LightCoral = { .94, .5, .5 },
-  LightCyan = { .88, 1, 1 },
-  LightGoldenrod = { .933, .867, .867 },
-  LightGoldenrodYellow = { .98, .98, .98 },
-  LightGray = { .828, .828, .828 },
-  LightGreen = { .565, .932, .932 },
-  LightGrey = { .828, .828, .828 },
-  LightPink = { 1, .712, .712 },
-  LightSalmon = { 1, .628, .628 },
-  LightSeaGreen = { .125, .698, .698 },
-  LightSkyBlue = { .53, .808, .808 },
-  LightSlateBlue = { .518, .44, .44 },
-  LightSlateGray = { .468, .532, .532 },
-  LightSlateGrey = { .468, .532, .532 },
-  LightSteelBlue = { .69, .77, .77 },
+  Khaki = { 0.94, 0.9, 0.9 },
+  Lavender = { 0.9, 0.9, 0.9 },
+  LavenderBlush = { 1, 0.94, 0.94 },
+  LawnGreen = { 0.488, 0.99, 0.99 },
+  LemonChiffon = { 1, 0.98, 0.98 },
+  LightBlue = { 0.68, 0.848, 0.848 },
+  LightCoral = { 0.94, 0.5, 0.5 },
+  LightCyan = { 0.88, 1, 1 },
+  LightGoldenrod = { 0.933, 0.867, 0.867 },
+  LightGoldenrodYellow = { 0.98, 0.98, 0.98 },
+  LightGray = { 0.828, 0.828, 0.828 },
+  LightGreen = { 0.565, 0.932, 0.932 },
+  LightGrey = { 0.828, 0.828, 0.828 },
+  LightPink = { 1, 0.712, 0.712 },
+  LightSalmon = { 1, 0.628, 0.628 },
+  LightSeaGreen = { 0.125, 0.698, 0.698 },
+  LightSkyBlue = { 0.53, 0.808, 0.808 },
+  LightSlateBlue = { 0.518, 0.44, 0.44 },
+  LightSlateGray = { 0.468, 0.532, 0.532 },
+  LightSlateGrey = { 0.468, 0.532, 0.532 },
+  LightSteelBlue = { 0.69, 0.77, 0.77 },
   LightYellow = { 1, 1, 1 },
   Lime = { 0, 1, 1 },
-  LimeGreen = { .196, .804, .804 },
-  Linen = { .98, .94, .94 },
+  LimeGreen = { 0.196, 0.804, 0.804 },
+  Linen = { 0.98, 0.94, 0.94 },
   Magenta = { 1, 0, 0 },
-  Maroon = { .5, 0, 0 },
-  MediumAquamarine = { .4, .804, .804 },
+  Maroon = { 0.5, 0, 0 },
+  MediumAquamarine = { 0.4, 0.804, 0.804 },
   MediumBlue = { 0, 0, 0 },
-  MediumOrchid = { .73, .332, .332 },
-  MediumPurple = { .576, .44, .44 },
-  MediumSeaGreen = { .235, .7, .7 },
-  MediumSlateBlue = { .484, .408, .408 },
-  MediumSpringGreen = { 0, .98, .98 },
-  MediumTurquoise = { .284, .82, .82 },
-  MediumVioletRed = { .78, .084, .084 },
-  MidnightBlue = { .098, .098, .098 },
-  MintCream = { .96, 1, 1 },
-  MistyRose = { 1, .894, .894 },
-  Moccasin = { 1, .894, .894 },
-  NavajoWhite = { 1, .87, .87 },
+  MediumOrchid = { 0.73, 0.332, 0.332 },
+  MediumPurple = { 0.576, 0.44, 0.44 },
+  MediumSeaGreen = { 0.235, 0.7, 0.7 },
+  MediumSlateBlue = { 0.484, 0.408, 0.408 },
+  MediumSpringGreen = { 0, 0.98, 0.98 },
+  MediumTurquoise = { 0.284, 0.82, 0.82 },
+  MediumVioletRed = { 0.78, 0.084, 0.084 },
+  MidnightBlue = { 0.098, 0.098, 0.098 },
+  MintCream = { 0.96, 1, 1 },
+  MistyRose = { 1, 0.894, 0.894 },
+  Moccasin = { 1, 0.894, 0.894 },
+  NavajoWhite = { 1, 0.87, 0.87 },
   Navy = { 0, 0, 0 },
   NavyBlue = { 0, 0, 0 },
-  OldLace = { .992, .96, .96 },
-  Olive = { .5, .5, .5 },
-  OliveDrab = { .42, .556, .556 },
-  Orange = { 1, .648, .648 },
-  OrangeRed = { 1, .27, .27 },
-  Orchid = { .855, .44, .44 },
-  PaleGoldenrod = { .932, .91, .91 },
-  PaleGreen = { .596, .985, .985 },
-  PaleTurquoise = { .688, .932, .932 },
-  PaleVioletRed = { .86, .44, .44 },
-  PapayaWhip = { 1, .936, .936 },
-  PeachPuff = { 1, .855, .855 },
-  Peru = { .804, .52, .52 },
-  Pink = { 1, .752, .752 },
-  Plum = { .868, .628, .628 },
-  PowderBlue = { .69, .88, .88 },
-  Purple = { .5, 0, 0 },
+  OldLace = { 0.992, 0.96, 0.96 },
+  Olive = { 0.5, 0.5, 0.5 },
+  OliveDrab = { 0.42, 0.556, 0.556 },
+  Orange = { 1, 0.648, 0.648 },
+  OrangeRed = { 1, 0.27, 0.27 },
+  Orchid = { 0.855, 0.44, 0.44 },
+  PaleGoldenrod = { 0.932, 0.91, 0.91 },
+  PaleGreen = { 0.596, 0.985, 0.985 },
+  PaleTurquoise = { 0.688, 0.932, 0.932 },
+  PaleVioletRed = { 0.86, 0.44, 0.44 },
+  PapayaWhip = { 1, 0.936, 0.936 },
+  PeachPuff = { 1, 0.855, 0.855 },
+  Peru = { 0.804, 0.52, 0.52 },
+  Pink = { 1, 0.752, 0.752 },
+  Plum = { 0.868, 0.628, 0.628 },
+  PowderBlue = { 0.69, 0.88, 0.88 },
+  Purple = { 0.5, 0, 0 },
   Red = { 1, 0, 0 },
-  RosyBrown = { .736, .56, .56 },
-  RoyalBlue = { .255, .41, .41 },
-  SaddleBrown = { .545, .27, .27 },
-  Salmon = { .98, .5, .5 },
-  SandyBrown = { .956, .644, .644 },
-  SeaGreen = { .18, .545, .545 },
-  Seashell = { 1, .96, .96 },
-  Sienna = { .628, .32, .32 },
-  Silver = { .752, .752, .752 },
-  SkyBlue = { .53, .808, .808 },
-  SlateBlue = { .415, .352, .352 },
-  SlateGray = { .44, .5, .5 },
-  SlateGrey = { .44, .5, .5 },
-  Snow = { 1, .98, .98 },
+  RosyBrown = { 0.736, 0.56, 0.56 },
+  RoyalBlue = { 0.255, 0.41, 0.41 },
+  SaddleBrown = { 0.545, 0.27, 0.27 },
+  Salmon = { 0.98, 0.5, 0.5 },
+  SandyBrown = { 0.956, 0.644, 0.644 },
+  SeaGreen = { 0.18, 0.545, 0.545 },
+  Seashell = { 1, 0.96, 0.96 },
+  Sienna = { 0.628, 0.32, 0.32 },
+  Silver = { 0.752, 0.752, 0.752 },
+  SkyBlue = { 0.53, 0.808, 0.808 },
+  SlateBlue = { 0.415, 0.352, 0.352 },
+  SlateGray = { 0.44, 0.5, 0.5 },
+  SlateGrey = { 0.44, 0.5, 0.5 },
+  Snow = { 1, 0.98, 0.98 },
   SpringGreen = { 0, 1, 1 },
-  SteelBlue = { .275, .51, .51 },
-  Tan = { .824, .705, .705 },
-  Teal = { 0, .5, .5 },
-  Thistle = { .848, .75, .75 },
-  Tomato = { 1, .39, .39 },
-  Turquoise = { .25, .88, .88 },
-  Violet = { .932, .51, .51 },
-  VioletRed = { .816, .125, .125 },
-  Wheat = { .96, .87, .87 },
+  SteelBlue = { 0.275, 0.51, 0.51 },
+  Tan = { 0.824, 0.705, 0.705 },
+  Teal = { 0, 0.5, 0.5 },
+  Thistle = { 0.848, 0.75, 0.75 },
+  Tomato = { 1, 0.39, 0.39 },
+  Turquoise = { 0.25, 0.88, 0.88 },
+  Violet = { 0.932, 0.51, 0.51 },
+  VioletRed = { 0.816, 0.125, 0.125 },
+  Wheat = { 0.96, 0.87, 0.87 },
   White = { 1, 1, 1 },
-  WhiteSmoke = { .96, .96, .96 },
+  WhiteSmoke = { 0.96, 0.96, 0.96 },
   Yellow = { 1, 1, 1 },
-  YellowGreen = { .604, .804, .804 },
+  YellowGreen = { 0.604, 0.804, 0.804 },
 }
 
 local x11names = {
-  AntiqueWhite1 = { 1, .936, .936 },
-  AntiqueWhite2 = { .932, .875, .875 },
-  AntiqueWhite3 = { .804, .752, .752 },
-  AntiqueWhite4 = { .545, .512, .512 },
-  Aquamarine1 = { .498, 1, 1 },
-  Aquamarine2 = { .464, .932, .932 },
-  Aquamarine3 = { .4, .804, .804 },
-  Aquamarine4 = { .27, .545, .545 },
-  Azure1 = { .94, 1, 1 },
-  Azure2 = { .88, .932, .932 },
-  Azure3 = { .756, .804, .804 },
-  Azure4 = { .512, .545, .545 },
-  Bisque1 = { 1, .894, .894 },
-  Bisque2 = { .932, .835, .835 },
-  Bisque3 = { .804, .716, .716 },
-  Bisque4 = { .545, .49, .49 },
+  AntiqueWhite1 = { 1, 0.936, 0.936 },
+  AntiqueWhite2 = { 0.932, 0.875, 0.875 },
+  AntiqueWhite3 = { 0.804, 0.752, 0.752 },
+  AntiqueWhite4 = { 0.545, 0.512, 0.512 },
+  Aquamarine1 = { 0.498, 1, 1 },
+  Aquamarine2 = { 0.464, 0.932, 0.932 },
+  Aquamarine3 = { 0.4, 0.804, 0.804 },
+  Aquamarine4 = { 0.27, 0.545, 0.545 },
+  Azure1 = { 0.94, 1, 1 },
+  Azure2 = { 0.88, 0.932, 0.932 },
+  Azure3 = { 0.756, 0.804, 0.804 },
+  Azure4 = { 0.512, 0.545, 0.545 },
+  Bisque1 = { 1, 0.894, 0.894 },
+  Bisque2 = { 0.932, 0.835, 0.835 },
+  Bisque3 = { 0.804, 0.716, 0.716 },
+  Bisque4 = { 0.545, 0.49, 0.49 },
   Blue1 = { 0, 0, 0 },
   Blue2 = { 0, 0, 0 },
   Blue3 = { 0, 0, 0 },
   Blue4 = { 0, 0, 0 },
-  Brown1 = { 1, .25, .25 },
-  Brown2 = { .932, .23, .23 },
-  Brown3 = { .804, .2, .2 },
-  Brown4 = { .545, .136, .136 },
-  Burlywood1 = { 1, .828, .828 },
-  Burlywood2 = { .932, .772, .772 },
-  Burlywood3 = { .804, .668, .668 },
-  Burlywood4 = { .545, .45, .45 },
-  CadetBlue1 = { .596, .96, .96 },
-  CadetBlue2 = { .556, .898, .898 },
-  CadetBlue3 = { .48, .772, .772 },
-  CadetBlue4 = { .325, .525, .525 },
-  Chartreuse1 = { .498, 1, 1 },
-  Chartreuse2 = { .464, .932, .932 },
-  Chartreuse3 = { .4, .804, .804 },
-  Chartreuse4 = { .27, .545, .545 },
-  Chocolate1 = { 1, .498, .498 },
-  Chocolate2 = { .932, .464, .464 },
-  Chocolate3 = { .804, .4, .4 },
-  Chocolate4 = { .545, .27, .27 },
-  Coral1 = { 1, .448, .448 },
-  Coral2 = { .932, .415, .415 },
-  Coral3 = { .804, .356, .356 },
-  Coral4 = { .545, .244, .244 },
-  Cornsilk1 = { 1, .972, .972 },
-  Cornsilk2 = { .932, .91, .91 },
-  Cornsilk3 = { .804, .785, .785 },
-  Cornsilk4 = { .545, .532, .532 },
+  Brown1 = { 1, 0.25, 0.25 },
+  Brown2 = { 0.932, 0.23, 0.23 },
+  Brown3 = { 0.804, 0.2, 0.2 },
+  Brown4 = { 0.545, 0.136, 0.136 },
+  Burlywood1 = { 1, 0.828, 0.828 },
+  Burlywood2 = { 0.932, 0.772, 0.772 },
+  Burlywood3 = { 0.804, 0.668, 0.668 },
+  Burlywood4 = { 0.545, 0.45, 0.45 },
+  CadetBlue1 = { 0.596, 0.96, 0.96 },
+  CadetBlue2 = { 0.556, 0.898, 0.898 },
+  CadetBlue3 = { 0.48, 0.772, 0.772 },
+  CadetBlue4 = { 0.325, 0.525, 0.525 },
+  Chartreuse1 = { 0.498, 1, 1 },
+  Chartreuse2 = { 0.464, 0.932, 0.932 },
+  Chartreuse3 = { 0.4, 0.804, 0.804 },
+  Chartreuse4 = { 0.27, 0.545, 0.545 },
+  Chocolate1 = { 1, 0.498, 0.498 },
+  Chocolate2 = { 0.932, 0.464, 0.464 },
+  Chocolate3 = { 0.804, 0.4, 0.4 },
+  Chocolate4 = { 0.545, 0.27, 0.27 },
+  Coral1 = { 1, 0.448, 0.448 },
+  Coral2 = { 0.932, 0.415, 0.415 },
+  Coral3 = { 0.804, 0.356, 0.356 },
+  Coral4 = { 0.545, 0.244, 0.244 },
+  Cornsilk1 = { 1, 0.972, 0.972 },
+  Cornsilk2 = { 0.932, 0.91, 0.91 },
+  Cornsilk3 = { 0.804, 0.785, 0.785 },
+  Cornsilk4 = { 0.545, 0.532, 0.532 },
   Cyan1 = { 0, 1, 1 },
-  Cyan2 = { 0, .932, .932 },
-  Cyan3 = { 0, .804, .804 },
-  Cyan4 = { 0, .545, .545 },
-  DarkGoldenrod1 = { 1, .725, .725 },
-  DarkGoldenrod2 = { .932, .68, .68 },
-  DarkGoldenrod3 = { .804, .585, .585 },
-  DarkGoldenrod4 = { .545, .396, .396 },
-  DarkOliveGreen1 = { .792, 1, 1 },
-  DarkOliveGreen2 = { .736, .932, .932 },
-  DarkOliveGreen3 = { .635, .804, .804 },
-  DarkOliveGreen4 = { .43, .545, .545 },
-  DarkOrange1 = { 1, .498, .498 },
-  DarkOrange2 = { .932, .464, .464 },
-  DarkOrange3 = { .804, .4, .4 },
-  DarkOrange4 = { .545, .27, .27 },
-  DarkOrchid1 = { .75, .244, .244 },
-  DarkOrchid2 = { .698, .228, .228 },
-  DarkOrchid3 = { .604, .196, .196 },
-  DarkOrchid4 = { .408, .132, .132 },
-  DarkSeaGreen1 = { .756, 1, 1 },
-  DarkSeaGreen2 = { .705, .932, .932 },
-  DarkSeaGreen3 = { .608, .804, .804 },
-  DarkSeaGreen4 = { .41, .545, .545 },
-  DarkSlateGray1 = { .592, 1, 1 },
-  DarkSlateGray2 = { .552, .932, .932 },
-  DarkSlateGray3 = { .475, .804, .804 },
-  DarkSlateGray4 = { .32, .545, .545 },
-  DeepPink1 = { 1, .08, .08 },
-  DeepPink2 = { .932, .07, .07 },
-  DeepPink3 = { .804, .064, .064 },
-  DeepPink4 = { .545, .04, .04 },
-  DeepSkyBlue1 = { 0, .75, .75 },
-  DeepSkyBlue2 = { 0, .698, .698 },
-  DeepSkyBlue3 = { 0, .604, .604 },
-  DeepSkyBlue4 = { 0, .408, .408 },
-  DodgerBlue1 = { .116, .565, .565 },
-  DodgerBlue2 = { .11, .525, .525 },
-  DodgerBlue3 = { .094, .455, .455 },
-  DodgerBlue4 = { .064, .305, .305 },
-  Firebrick1 = { 1, .19, .19 },
-  Firebrick2 = { .932, .172, .172 },
-  Firebrick3 = { .804, .15, .15 },
-  Firebrick4 = { .545, .1, .1 },
-  Gold1 = { 1, .844, .844 },
-  Gold2 = { .932, .79, .79 },
-  Gold3 = { .804, .68, .68 },
-  Gold4 = { .545, .46, .46 },
-  Goldenrod1 = { 1, .756, .756 },
-  Goldenrod2 = { .932, .705, .705 },
-  Goldenrod3 = { .804, .608, .608 },
-  Goldenrod4 = { .545, .41, .41 },
+  Cyan2 = { 0, 0.932, 0.932 },
+  Cyan3 = { 0, 0.804, 0.804 },
+  Cyan4 = { 0, 0.545, 0.545 },
+  DarkGoldenrod1 = { 1, 0.725, 0.725 },
+  DarkGoldenrod2 = { 0.932, 0.68, 0.68 },
+  DarkGoldenrod3 = { 0.804, 0.585, 0.585 },
+  DarkGoldenrod4 = { 0.545, 0.396, 0.396 },
+  DarkOliveGreen1 = { 0.792, 1, 1 },
+  DarkOliveGreen2 = { 0.736, 0.932, 0.932 },
+  DarkOliveGreen3 = { 0.635, 0.804, 0.804 },
+  DarkOliveGreen4 = { 0.43, 0.545, 0.545 },
+  DarkOrange1 = { 1, 0.498, 0.498 },
+  DarkOrange2 = { 0.932, 0.464, 0.464 },
+  DarkOrange3 = { 0.804, 0.4, 0.4 },
+  DarkOrange4 = { 0.545, 0.27, 0.27 },
+  DarkOrchid1 = { 0.75, 0.244, 0.244 },
+  DarkOrchid2 = { 0.698, 0.228, 0.228 },
+  DarkOrchid3 = { 0.604, 0.196, 0.196 },
+  DarkOrchid4 = { 0.408, 0.132, 0.132 },
+  DarkSeaGreen1 = { 0.756, 1, 1 },
+  DarkSeaGreen2 = { 0.705, 0.932, 0.932 },
+  DarkSeaGreen3 = { 0.608, 0.804, 0.804 },
+  DarkSeaGreen4 = { 0.41, 0.545, 0.545 },
+  DarkSlateGray1 = { 0.592, 1, 1 },
+  DarkSlateGray2 = { 0.552, 0.932, 0.932 },
+  DarkSlateGray3 = { 0.475, 0.804, 0.804 },
+  DarkSlateGray4 = { 0.32, 0.545, 0.545 },
+  DeepPink1 = { 1, 0.08, 0.08 },
+  DeepPink2 = { 0.932, 0.07, 0.07 },
+  DeepPink3 = { 0.804, 0.064, 0.064 },
+  DeepPink4 = { 0.545, 0.04, 0.04 },
+  DeepSkyBlue1 = { 0, 0.75, 0.75 },
+  DeepSkyBlue2 = { 0, 0.698, 0.698 },
+  DeepSkyBlue3 = { 0, 0.604, 0.604 },
+  DeepSkyBlue4 = { 0, 0.408, 0.408 },
+  DodgerBlue1 = { 0.116, 0.565, 0.565 },
+  DodgerBlue2 = { 0.11, 0.525, 0.525 },
+  DodgerBlue3 = { 0.094, 0.455, 0.455 },
+  DodgerBlue4 = { 0.064, 0.305, 0.305 },
+  Firebrick1 = { 1, 0.19, 0.19 },
+  Firebrick2 = { 0.932, 0.172, 0.172 },
+  Firebrick3 = { 0.804, 0.15, 0.15 },
+  Firebrick4 = { 0.545, 0.1, 0.1 },
+  Gold1 = { 1, 0.844, 0.844 },
+  Gold2 = { 0.932, 0.79, 0.79 },
+  Gold3 = { 0.804, 0.68, 0.68 },
+  Gold4 = { 0.545, 0.46, 0.46 },
+  Goldenrod1 = { 1, 0.756, 0.756 },
+  Goldenrod2 = { 0.932, 0.705, 0.705 },
+  Goldenrod3 = { 0.804, 0.608, 0.608 },
+  Goldenrod4 = { 0.545, 0.41, 0.41 },
   Green1 = { 0, 1, 1 },
-  Green2 = { 0, .932, .932 },
-  Green3 = { 0, .804, .804 },
-  Green4 = { 0, .545, .545 },
-  Honeydew1 = { .94, 1, 1 },
-  Honeydew2 = { .88, .932, .932 },
-  Honeydew3 = { .756, .804, .804 },
-  Honeydew4 = { .512, .545, .545 },
-  HotPink1 = { 1, .43, .43 },
-  HotPink2 = { .932, .415, .415 },
-  HotPink3 = { .804, .376, .376 },
-  HotPink4 = { .545, .228, .228 },
-  IndianRed1 = { 1, .415, .415 },
-  IndianRed2 = { .932, .39, .39 },
-  IndianRed3 = { .804, .332, .332 },
-  IndianRed4 = { .545, .228, .228 },
+  Green2 = { 0, 0.932, 0.932 },
+  Green3 = { 0, 0.804, 0.804 },
+  Green4 = { 0, 0.545, 0.545 },
+  Honeydew1 = { 0.94, 1, 1 },
+  Honeydew2 = { 0.88, 0.932, 0.932 },
+  Honeydew3 = { 0.756, 0.804, 0.804 },
+  Honeydew4 = { 0.512, 0.545, 0.545 },
+  HotPink1 = { 1, 0.43, 0.43 },
+  HotPink2 = { 0.932, 0.415, 0.415 },
+  HotPink3 = { 0.804, 0.376, 0.376 },
+  HotPink4 = { 0.545, 0.228, 0.228 },
+  IndianRed1 = { 1, 0.415, 0.415 },
+  IndianRed2 = { 0.932, 0.39, 0.39 },
+  IndianRed3 = { 0.804, 0.332, 0.332 },
+  IndianRed4 = { 0.545, 0.228, 0.228 },
   Ivory1 = { 1, 1, 1 },
-  Ivory2 = { .932, .932, .932 },
-  Ivory3 = { .804, .804, .804 },
-  Ivory4 = { .545, .545, .545 },
-  Khaki1 = { 1, .965, .965 },
-  Khaki2 = { .932, .9, .9 },
-  Khaki3 = { .804, .776, .776 },
-  Khaki4 = { .545, .525, .525 },
-  LavenderBlush1 = { 1, .94, .94 },
-  LavenderBlush2 = { .932, .88, .88 },
-  LavenderBlush3 = { .804, .756, .756 },
-  LavenderBlush4 = { .545, .512, .512 },
-  LemonChiffon1 = { 1, .98, .98 },
-  LemonChiffon2 = { .932, .912, .912 },
-  LemonChiffon3 = { .804, .79, .79 },
-  LemonChiffon4 = { .545, .536, .536 },
-  LightBlue1 = { .75, .936, .936 },
-  LightBlue2 = { .698, .875, .875 },
-  LightBlue3 = { .604, .752, .752 },
-  LightBlue4 = { .408, .512, .512 },
-  LightCyan1 = { .88, 1, 1 },
-  LightCyan2 = { .82, .932, .932 },
-  LightCyan3 = { .705, .804, .804 },
-  LightCyan4 = { .48, .545, .545 },
-  LightGoldenrod1 = { 1, .925, .925 },
-  LightGoldenrod2 = { .932, .864, .864 },
-  LightGoldenrod3 = { .804, .745, .745 },
-  LightGoldenrod4 = { .545, .505, .505 },
-  LightPink1 = { 1, .684, .684 },
-  LightPink2 = { .932, .635, .635 },
-  LightPink3 = { .804, .55, .55 },
-  LightPink4 = { .545, .372, .372 },
-  LightSalmon1 = { 1, .628, .628 },
-  LightSalmon2 = { .932, .585, .585 },
-  LightSalmon3 = { .804, .505, .505 },
-  LightSalmon4 = { .545, .34, .34 },
-  LightSkyBlue1 = { .69, .888, .888 },
-  LightSkyBlue2 = { .644, .828, .828 },
-  LightSkyBlue3 = { .552, .712, .712 },
-  LightSkyBlue4 = { .376, .484, .484 },
-  LightSteelBlue1 = { .792, .884, .884 },
-  LightSteelBlue2 = { .736, .824, .824 },
-  LightSteelBlue3 = { .635, .71, .71 },
-  LightSteelBlue4 = { .43, .484, .484 },
+  Ivory2 = { 0.932, 0.932, 0.932 },
+  Ivory3 = { 0.804, 0.804, 0.804 },
+  Ivory4 = { 0.545, 0.545, 0.545 },
+  Khaki1 = { 1, 0.965, 0.965 },
+  Khaki2 = { 0.932, 0.9, 0.9 },
+  Khaki3 = { 0.804, 0.776, 0.776 },
+  Khaki4 = { 0.545, 0.525, 0.525 },
+  LavenderBlush1 = { 1, 0.94, 0.94 },
+  LavenderBlush2 = { 0.932, 0.88, 0.88 },
+  LavenderBlush3 = { 0.804, 0.756, 0.756 },
+  LavenderBlush4 = { 0.545, 0.512, 0.512 },
+  LemonChiffon1 = { 1, 0.98, 0.98 },
+  LemonChiffon2 = { 0.932, 0.912, 0.912 },
+  LemonChiffon3 = { 0.804, 0.79, 0.79 },
+  LemonChiffon4 = { 0.545, 0.536, 0.536 },
+  LightBlue1 = { 0.75, 0.936, 0.936 },
+  LightBlue2 = { 0.698, 0.875, 0.875 },
+  LightBlue3 = { 0.604, 0.752, 0.752 },
+  LightBlue4 = { 0.408, 0.512, 0.512 },
+  LightCyan1 = { 0.88, 1, 1 },
+  LightCyan2 = { 0.82, 0.932, 0.932 },
+  LightCyan3 = { 0.705, 0.804, 0.804 },
+  LightCyan4 = { 0.48, 0.545, 0.545 },
+  LightGoldenrod1 = { 1, 0.925, 0.925 },
+  LightGoldenrod2 = { 0.932, 0.864, 0.864 },
+  LightGoldenrod3 = { 0.804, 0.745, 0.745 },
+  LightGoldenrod4 = { 0.545, 0.505, 0.505 },
+  LightPink1 = { 1, 0.684, 0.684 },
+  LightPink2 = { 0.932, 0.635, 0.635 },
+  LightPink3 = { 0.804, 0.55, 0.55 },
+  LightPink4 = { 0.545, 0.372, 0.372 },
+  LightSalmon1 = { 1, 0.628, 0.628 },
+  LightSalmon2 = { 0.932, 0.585, 0.585 },
+  LightSalmon3 = { 0.804, 0.505, 0.505 },
+  LightSalmon4 = { 0.545, 0.34, 0.34 },
+  LightSkyBlue1 = { 0.69, 0.888, 0.888 },
+  LightSkyBlue2 = { 0.644, 0.828, 0.828 },
+  LightSkyBlue3 = { 0.552, 0.712, 0.712 },
+  LightSkyBlue4 = { 0.376, 0.484, 0.484 },
+  LightSteelBlue1 = { 0.792, 0.884, 0.884 },
+  LightSteelBlue2 = { 0.736, 0.824, 0.824 },
+  LightSteelBlue3 = { 0.635, 0.71, 0.71 },
+  LightSteelBlue4 = { 0.43, 0.484, 0.484 },
   LightYellow1 = { 1, 1, 1 },
-  LightYellow2 = { .932, .932, .932 },
-  LightYellow3 = { .804, .804, .804 },
-  LightYellow4 = { .545, .545, .545 },
+  LightYellow2 = { 0.932, 0.932, 0.932 },
+  LightYellow3 = { 0.804, 0.804, 0.804 },
+  LightYellow4 = { 0.545, 0.545, 0.545 },
   Magenta1 = { 1, 0, 0 },
-  Magenta2 = { .932, 0, 0 },
-  Magenta3 = { .804, 0, 0 },
-  Magenta4 = { .545, 0, 0 },
-  Maroon1 = { 1, .204, .204 },
-  Maroon2 = { .932, .19, .19 },
-  Maroon3 = { .804, .16, .16 },
-  Maroon4 = { .545, .11, .11 },
-  MediumOrchid1 = { .88, .4, .4 },
-  MediumOrchid2 = { .82, .372, .372 },
-  MediumOrchid3 = { .705, .32, .32 },
-  MediumOrchid4 = { .48, .215, .215 },
-  MediumPurple1 = { .67, .51, .51 },
-  MediumPurple2 = { .624, .475, .475 },
-  MediumPurple3 = { .536, .408, .408 },
-  MediumPurple4 = { .365, .28, .28 },
-  MistyRose1 = { 1, .894, .894 },
-  MistyRose2 = { .932, .835, .835 },
-  MistyRose3 = { .804, .716, .716 },
-  MistyRose4 = { .545, .49, .49 },
-  NavajoWhite1 = { 1, .87, .87 },
-  NavajoWhite2 = { .932, .81, .81 },
-  NavajoWhite3 = { .804, .7, .7 },
-  NavajoWhite4 = { .545, .475, .475 },
-  OliveDrab1 = { .752, 1, 1 },
-  OliveDrab2 = { .7, .932, .932 },
-  OliveDrab3 = { .604, .804, .804 },
-  OliveDrab4 = { .41, .545, .545 },
-  Orange1 = { 1, .648, .648 },
-  Orange2 = { .932, .604, .604 },
-  Orange3 = { .804, .52, .52 },
-  Orange4 = { .545, .352, .352 },
-  OrangeRed1 = { 1, .27, .27 },
-  OrangeRed2 = { .932, .25, .25 },
-  OrangeRed3 = { .804, .215, .215 },
-  OrangeRed4 = { .545, .145, .145 },
-  Orchid1 = { 1, .512, .512 },
-  Orchid2 = { .932, .48, .48 },
-  Orchid3 = { .804, .41, .41 },
-  Orchid4 = { .545, .28, .28 },
-  PaleGreen1 = { .604, 1, 1 },
-  PaleGreen2 = { .565, .932, .932 },
-  PaleGreen3 = { .488, .804, .804 },
-  PaleGreen4 = { .33, .545, .545 },
-  PaleTurquoise1 = { .732, 1, 1 },
-  PaleTurquoise2 = { .684, .932, .932 },
-  PaleTurquoise3 = { .59, .804, .804 },
-  PaleTurquoise4 = { .4, .545, .545 },
-  PaleVioletRed1 = { 1, .51, .51 },
-  PaleVioletRed2 = { .932, .475, .475 },
-  PaleVioletRed3 = { .804, .408, .408 },
-  PaleVioletRed4 = { .545, .28, .28 },
-  PeachPuff1 = { 1, .855, .855 },
-  PeachPuff2 = { .932, .796, .796 },
-  PeachPuff3 = { .804, .688, .688 },
-  PeachPuff4 = { .545, .468, .468 },
-  Pink1 = { 1, .71, .71 },
-  Pink2 = { .932, .664, .664 },
-  Pink3 = { .804, .57, .57 },
-  Pink4 = { .545, .39, .39 },
-  Plum1 = { 1, .732, .732 },
-  Plum2 = { .932, .684, .684 },
-  Plum3 = { .804, .59, .59 },
-  Plum4 = { .545, .4, .4 },
-  Purple1 = { .608, .19, .19 },
-  Purple2 = { .57, .172, .172 },
-  Purple3 = { .49, .15, .15 },
-  Purple4 = { .332, .1, .1 },
+  Magenta2 = { 0.932, 0, 0 },
+  Magenta3 = { 0.804, 0, 0 },
+  Magenta4 = { 0.545, 0, 0 },
+  Maroon1 = { 1, 0.204, 0.204 },
+  Maroon2 = { 0.932, 0.19, 0.19 },
+  Maroon3 = { 0.804, 0.16, 0.16 },
+  Maroon4 = { 0.545, 0.11, 0.11 },
+  MediumOrchid1 = { 0.88, 0.4, 0.4 },
+  MediumOrchid2 = { 0.82, 0.372, 0.372 },
+  MediumOrchid3 = { 0.705, 0.32, 0.32 },
+  MediumOrchid4 = { 0.48, 0.215, 0.215 },
+  MediumPurple1 = { 0.67, 0.51, 0.51 },
+  MediumPurple2 = { 0.624, 0.475, 0.475 },
+  MediumPurple3 = { 0.536, 0.408, 0.408 },
+  MediumPurple4 = { 0.365, 0.28, 0.28 },
+  MistyRose1 = { 1, 0.894, 0.894 },
+  MistyRose2 = { 0.932, 0.835, 0.835 },
+  MistyRose3 = { 0.804, 0.716, 0.716 },
+  MistyRose4 = { 0.545, 0.49, 0.49 },
+  NavajoWhite1 = { 1, 0.87, 0.87 },
+  NavajoWhite2 = { 0.932, 0.81, 0.81 },
+  NavajoWhite3 = { 0.804, 0.7, 0.7 },
+  NavajoWhite4 = { 0.545, 0.475, 0.475 },
+  OliveDrab1 = { 0.752, 1, 1 },
+  OliveDrab2 = { 0.7, 0.932, 0.932 },
+  OliveDrab3 = { 0.604, 0.804, 0.804 },
+  OliveDrab4 = { 0.41, 0.545, 0.545 },
+  Orange1 = { 1, 0.648, 0.648 },
+  Orange2 = { 0.932, 0.604, 0.604 },
+  Orange3 = { 0.804, 0.52, 0.52 },
+  Orange4 = { 0.545, 0.352, 0.352 },
+  OrangeRed1 = { 1, 0.27, 0.27 },
+  OrangeRed2 = { 0.932, 0.25, 0.25 },
+  OrangeRed3 = { 0.804, 0.215, 0.215 },
+  OrangeRed4 = { 0.545, 0.145, 0.145 },
+  Orchid1 = { 1, 0.512, 0.512 },
+  Orchid2 = { 0.932, 0.48, 0.48 },
+  Orchid3 = { 0.804, 0.41, 0.41 },
+  Orchid4 = { 0.545, 0.28, 0.28 },
+  PaleGreen1 = { 0.604, 1, 1 },
+  PaleGreen2 = { 0.565, 0.932, 0.932 },
+  PaleGreen3 = { 0.488, 0.804, 0.804 },
+  PaleGreen4 = { 0.33, 0.545, 0.545 },
+  PaleTurquoise1 = { 0.732, 1, 1 },
+  PaleTurquoise2 = { 0.684, 0.932, 0.932 },
+  PaleTurquoise3 = { 0.59, 0.804, 0.804 },
+  PaleTurquoise4 = { 0.4, 0.545, 0.545 },
+  PaleVioletRed1 = { 1, 0.51, 0.51 },
+  PaleVioletRed2 = { 0.932, 0.475, 0.475 },
+  PaleVioletRed3 = { 0.804, 0.408, 0.408 },
+  PaleVioletRed4 = { 0.545, 0.28, 0.28 },
+  PeachPuff1 = { 1, 0.855, 0.855 },
+  PeachPuff2 = { 0.932, 0.796, 0.796 },
+  PeachPuff3 = { 0.804, 0.688, 0.688 },
+  PeachPuff4 = { 0.545, 0.468, 0.468 },
+  Pink1 = { 1, 0.71, 0.71 },
+  Pink2 = { 0.932, 0.664, 0.664 },
+  Pink3 = { 0.804, 0.57, 0.57 },
+  Pink4 = { 0.545, 0.39, 0.39 },
+  Plum1 = { 1, 0.732, 0.732 },
+  Plum2 = { 0.932, 0.684, 0.684 },
+  Plum3 = { 0.804, 0.59, 0.59 },
+  Plum4 = { 0.545, 0.4, 0.4 },
+  Purple1 = { 0.608, 0.19, 0.19 },
+  Purple2 = { 0.57, 0.172, 0.172 },
+  Purple3 = { 0.49, 0.15, 0.15 },
+  Purple4 = { 0.332, 0.1, 0.1 },
   Red1 = { 1, 0, 0 },
-  Red2 = { .932, 0, 0 },
-  Red3 = { .804, 0, 0 },
-  Red4 = { .545, 0, 0 },
-  RosyBrown1 = { 1, .756, .756 },
-  RosyBrown2 = { .932, .705, .705 },
-  RosyBrown3 = { .804, .608, .608 },
-  RosyBrown4 = { .545, .41, .41 },
-  RoyalBlue1 = { .284, .464, .464 },
-  RoyalBlue2 = { .264, .43, .43 },
-  RoyalBlue3 = { .228, .372, .372 },
-  RoyalBlue4 = { .152, .25, .25 },
-  Salmon1 = { 1, .55, .55 },
-  Salmon2 = { .932, .51, .51 },
-  Salmon3 = { .804, .44, .44 },
-  Salmon4 = { .545, .298, .298 },
-  SeaGreen1 = { .33, 1, 1 },
-  SeaGreen2 = { .305, .932, .932 },
-  SeaGreen3 = { .264, .804, .804 },
-  SeaGreen4 = { .18, .545, .545 },
-  Seashell1 = { 1, .96, .96 },
-  Seashell2 = { .932, .898, .898 },
-  Seashell3 = { .804, .772, .772 },
-  Seashell4 = { .545, .525, .525 },
-  Sienna1 = { 1, .51, .51 },
-  Sienna2 = { .932, .475, .475 },
-  Sienna3 = { .804, .408, .408 },
-  Sienna4 = { .545, .28, .28 },
-  SkyBlue1 = { .53, .808, .808 },
-  SkyBlue2 = { .494, .752, .752 },
-  SkyBlue3 = { .424, .65, .65 },
-  SkyBlue4 = { .29, .44, .44 },
-  SlateBlue1 = { .512, .435, .435 },
-  SlateBlue2 = { .48, .404, .404 },
-  SlateBlue3 = { .41, .35, .35 },
-  SlateBlue4 = { .28, .235, .235 },
-  SlateGray1 = { .776, .888, .888 },
-  SlateGray2 = { .725, .828, .828 },
-  SlateGray3 = { .624, .712, .712 },
-  SlateGray4 = { .424, .484, .484 },
-  Snow1 = { 1, .98, .98 },
-  Snow2 = { .932, .912, .912 },
-  Snow3 = { .804, .79, .79 },
-  Snow4 = { .545, .536, .536 },
+  Red2 = { 0.932, 0, 0 },
+  Red3 = { 0.804, 0, 0 },
+  Red4 = { 0.545, 0, 0 },
+  RosyBrown1 = { 1, 0.756, 0.756 },
+  RosyBrown2 = { 0.932, 0.705, 0.705 },
+  RosyBrown3 = { 0.804, 0.608, 0.608 },
+  RosyBrown4 = { 0.545, 0.41, 0.41 },
+  RoyalBlue1 = { 0.284, 0.464, 0.464 },
+  RoyalBlue2 = { 0.264, 0.43, 0.43 },
+  RoyalBlue3 = { 0.228, 0.372, 0.372 },
+  RoyalBlue4 = { 0.152, 0.25, 0.25 },
+  Salmon1 = { 1, 0.55, 0.55 },
+  Salmon2 = { 0.932, 0.51, 0.51 },
+  Salmon3 = { 0.804, 0.44, 0.44 },
+  Salmon4 = { 0.545, 0.298, 0.298 },
+  SeaGreen1 = { 0.33, 1, 1 },
+  SeaGreen2 = { 0.305, 0.932, 0.932 },
+  SeaGreen3 = { 0.264, 0.804, 0.804 },
+  SeaGreen4 = { 0.18, 0.545, 0.545 },
+  Seashell1 = { 1, 0.96, 0.96 },
+  Seashell2 = { 0.932, 0.898, 0.898 },
+  Seashell3 = { 0.804, 0.772, 0.772 },
+  Seashell4 = { 0.545, 0.525, 0.525 },
+  Sienna1 = { 1, 0.51, 0.51 },
+  Sienna2 = { 0.932, 0.475, 0.475 },
+  Sienna3 = { 0.804, 0.408, 0.408 },
+  Sienna4 = { 0.545, 0.28, 0.28 },
+  SkyBlue1 = { 0.53, 0.808, 0.808 },
+  SkyBlue2 = { 0.494, 0.752, 0.752 },
+  SkyBlue3 = { 0.424, 0.65, 0.65 },
+  SkyBlue4 = { 0.29, 0.44, 0.44 },
+  SlateBlue1 = { 0.512, 0.435, 0.435 },
+  SlateBlue2 = { 0.48, 0.404, 0.404 },
+  SlateBlue3 = { 0.41, 0.35, 0.35 },
+  SlateBlue4 = { 0.28, 0.235, 0.235 },
+  SlateGray1 = { 0.776, 0.888, 0.888 },
+  SlateGray2 = { 0.725, 0.828, 0.828 },
+  SlateGray3 = { 0.624, 0.712, 0.712 },
+  SlateGray4 = { 0.424, 0.484, 0.484 },
+  Snow1 = { 1, 0.98, 0.98 },
+  Snow2 = { 0.932, 0.912, 0.912 },
+  Snow3 = { 0.804, 0.79, 0.79 },
+  Snow4 = { 0.545, 0.536, 0.536 },
   SpringGreen1 = { 0, 1, 1 },
-  SpringGreen2 = { 0, .932, .932 },
-  SpringGreen3 = { 0, .804, .804 },
-  SpringGreen4 = { 0, .545, .545 },
-  SteelBlue1 = { .39, .72, .72 },
-  SteelBlue2 = { .36, .675, .675 },
-  SteelBlue3 = { .31, .58, .58 },
-  SteelBlue4 = { .21, .392, .392 },
-  Tan1 = { 1, .648, .648 },
-  Tan2 = { .932, .604, .604 },
-  Tan3 = { .804, .52, .52 },
-  Tan4 = { .545, .352, .352 },
-  Thistle1 = { 1, .884, .884 },
-  Thistle2 = { .932, .824, .824 },
-  Thistle3 = { .804, .71, .71 },
-  Thistle4 = { .545, .484, .484 },
-  Tomato1 = { 1, .39, .39 },
-  Tomato2 = { .932, .36, .36 },
-  Tomato3 = { .804, .31, .31 },
-  Tomato4 = { .545, .21, .21 },
-  Turquoise1 = { 0, .96, .96 },
-  Turquoise2 = { 0, .898, .898 },
-  Turquoise3 = { 0, .772, .772 },
-  Turquoise4 = { 0, .525, .525 },
-  VioletRed1 = { 1, .244, .244 },
-  VioletRed2 = { .932, .228, .228 },
-  VioletRed3 = { .804, .196, .196 },
-  VioletRed4 = { .545, .132, .132 },
-  Wheat1 = { 1, .905, .905 },
-  Wheat2 = { .932, .848, .848 },
-  Wheat3 = { .804, .73, .73 },
-  Wheat4 = { .545, .494, .494 },
+  SpringGreen2 = { 0, 0.932, 0.932 },
+  SpringGreen3 = { 0, 0.804, 0.804 },
+  SpringGreen4 = { 0, 0.545, 0.545 },
+  SteelBlue1 = { 0.39, 0.72, 0.72 },
+  SteelBlue2 = { 0.36, 0.675, 0.675 },
+  SteelBlue3 = { 0.31, 0.58, 0.58 },
+  SteelBlue4 = { 0.21, 0.392, 0.392 },
+  Tan1 = { 1, 0.648, 0.648 },
+  Tan2 = { 0.932, 0.604, 0.604 },
+  Tan3 = { 0.804, 0.52, 0.52 },
+  Tan4 = { 0.545, 0.352, 0.352 },
+  Thistle1 = { 1, 0.884, 0.884 },
+  Thistle2 = { 0.932, 0.824, 0.824 },
+  Thistle3 = { 0.804, 0.71, 0.71 },
+  Thistle4 = { 0.545, 0.484, 0.484 },
+  Tomato1 = { 1, 0.39, 0.39 },
+  Tomato2 = { 0.932, 0.36, 0.36 },
+  Tomato3 = { 0.804, 0.31, 0.31 },
+  Tomato4 = { 0.545, 0.21, 0.21 },
+  Turquoise1 = { 0, 0.96, 0.96 },
+  Turquoise2 = { 0, 0.898, 0.898 },
+  Turquoise3 = { 0, 0.772, 0.772 },
+  Turquoise4 = { 0, 0.525, 0.525 },
+  VioletRed1 = { 1, 0.244, 0.244 },
+  VioletRed2 = { 0.932, 0.228, 0.228 },
+  VioletRed3 = { 0.804, 0.196, 0.196 },
+  VioletRed4 = { 0.545, 0.132, 0.132 },
+  Wheat1 = { 1, 0.905, 0.905 },
+  Wheat2 = { 0.932, 0.848, 0.848 },
+  Wheat3 = { 0.804, 0.73, 0.73 },
+  Wheat4 = { 0.545, 0.494, 0.494 },
   Yellow1 = { 1, 1, 1 },
-  Yellow2 = { .932, .932, .932 },
-  Yellow3 = { .804, .804, .804 },
-  Yellow4 = { .545, .545, .545 },
-  Gray0 = { .745, .745, .745 },
+  Yellow2 = { 0.932, 0.932, 0.932 },
+  Yellow3 = { 0.804, 0.804, 0.804 },
+  Yellow4 = { 0.545, 0.545, 0.545 },
+  Gray0 = { 0.745, 0.745, 0.745 },
   Green0 = { 0, 1, 1 },
-  Grey0 = { .745, .745, .745 },
-  Maroon0 = { .69, .19, .19 },
-  Purple0 = { .628, .125, .125 },
-
+  Grey0 = { 0.745, 0.745, 0.745 },
+  Maroon0 = { 0.69, 0.19, 0.19 },
+  Purple0 = { 0.628, 0.125, 0.125 },
 }
 
-local color = Color "#ff0044"
+local color = Color '#ff0044'
 
 -- Print color
 print(color) -- prints: #ff0000
@@ -1662,26 +1689,26 @@ print(color) -- prints: #ff0000
 -- Print color as hsv
 local h, s, v = color:hsv()
 print(h * 360, s * 100, v * 100) -- prints: 0 100 100
-print(color:tostring "hsv")      -- prints: hsv(0, 100%, 100%)
+print(color:tostring 'hsv') -- prints: hsv(0, 100%, 100%)
 
 -- Print color as hwb
 local h, w, b = color:hsv()
 print(h * 360, w * 100, b * 100) -- prints: 0 0 0
-print(color:tostring "hwb")      -- prints: hwb(0, 0%, 0%)
+print(color:tostring 'hwb') -- prints: hwb(0, 0%, 0%)
 
 -- Print color as hsla
 local h, s, l, a = color:hsla()
 print(h * 360, s * 100, l * 100, a) -- prints: 0 100 50 1
-print(color:tostring "hsla")        -- prints: hsla(0, 100%, 50%, 1)
+print(color:tostring 'hsla') -- prints: hsla(0, 100%, 50%, 1)
 
 -- Print color as rgba
 local r, g, b, a = color:rgba()
 print(r * 255, g * 255, b * 255, a) -- prints: 255 0 0 1
-print(color:tostring "rgba")        -- prints: rgba(255, 0, 0, 1)
+print(color:tostring 'rgba') -- prints: rgba(255, 0, 0, 1)
 
 -- Print color as cmyk
-print(color:cmyk())          --prints: 0 1 1 0
-print(color:tostring "cmyk") -- prints: cmyk(0%, 100%, 100%, 0%)
+print(color:cmyk()) -- prints: 0 1 1 0
+print(color:tostring 'cmyk') -- prints: cmyk(0%, 100%, 100%, 0%)
 
 -- Print color as NCol
-print(color:tostring "ncol") -- prints: R0, 0%, 0%
+print(color:tostring 'ncol') -- prints: R0, 0%, 0%
