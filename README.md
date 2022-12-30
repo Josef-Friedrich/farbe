@@ -1,4 +1,6 @@
-# luafarbe
+# farbe
+
+Color management (conversion, names) for LuaTeX implemented in Lua.
 
 Based on https://luarocks.org/modules/Firanel/lua-color
 
