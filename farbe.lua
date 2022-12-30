@@ -919,9 +919,9 @@ local function load_main_color_class()
               l = tonumPercent(l),
             }
           elseif func == 'hsla' then
-            local h, s, v, a =
+            local h, s, l, a =
               values:match '([x.%x]+)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)[ ,]+([x.%x]+%%?)'
-            assert(h and s and v and a)
+            assert(h and s and l and a)
             return self:set{
               h = tonumber(h) / 360,
               s = tonumPercent(s),
