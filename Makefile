@@ -1,4 +1,4 @@
-jobname = luafarbe
+jobname = farbe
 texmf = $(HOME)/texmf
 texmftex = $(texmf)/tex/luatex
 installdir = $(texmftex)/$(jobname)

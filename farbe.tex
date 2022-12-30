@@ -1,0 +1,7 @@
+\directlua{
+  farbe = require('farbe.lua')
+}
+
+\def\FarbeColor#1{%
+  \directlua{farbe.print_pdf_colorstack_node('#1')}%
+}
