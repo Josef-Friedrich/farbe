@@ -1,4 +1,5 @@
 
+---@class Node
 
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 local colors = {
@@ -1686,7 +1687,11 @@ local function load_main_color_class()
     return color ~= nil and color.__is_color == true
   end
 
-  function Color:pdf_colorstack_string()
+  ---Format a PDF colorstack string. This string can be assigned to the
+  --- `node.data` field of a PDF colorstock node.
+  ---
+  ---@return string # A string like this example `1 0 0 rg 1 0 0 RG`
+  function Color:format_pdf_colorstack_string()
     return table.concat({
       self.r,
       self.g,
@@ -1699,13 +1704,17 @@ local function load_main_color_class()
     }, ' ')
   end
 
+  ---Create a PDF colorstack node.
+  ---
+  ---@return Node
   function Color:create_pdf_colorstack_node()
     local whatsit = node.new('whatsit', 'pdf_colorstack')
     whatsit.stack = 0
-    whatsit.data = self:pdf_colorstack_string()
+    whatsit.data = self:format_pdf_colorstack_string()
     return whatsit
   end
 
+  ---Write a PDF colorstock node using `node.write()`.
   function Color:write_pdf_colorstack_node()
     node.write(self:create_pdf_colorstack_node())
   end
