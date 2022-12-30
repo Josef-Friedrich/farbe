@@ -15,5 +15,14 @@
     "**/*.pdf": true,
     "**/*.fdb_latexmk": true,
     "**/*.synctex.gz": true,
+    "**/*.fls": true,
+    "**/*.hd": true,
+    "**/*.idx": true,
+    "**/*.ilg": true,
+    "**/*.glo": true,
+    "**/*.ind": true,
+    "**/*.out": true,
+    "**/*.toc": true,
+    "**/_minted*/": true
   }
 }
