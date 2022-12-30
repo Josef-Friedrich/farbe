@@ -1718,7 +1718,7 @@ local Color = load_main_color_class()
 
 return {
   Color = Color,
-  print_pdf_colorstack_node = function(color_spec)
+  write_pdf_colorstack_node = function(color_spec)
     local color = Color(color_spec)
     color:write_pdf_colorstack_node()
   end,
