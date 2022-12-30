@@ -1,3 +1,5 @@
+
+
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 local colors = {
   -- base colors
@@ -1697,11 +1699,15 @@ local function load_main_color_class()
     }, ' ')
   end
 
-  function Color:write_pdf_colorstack_node()
+  function Color:create_pdf_colorstack_node()
     local whatsit = node.new('whatsit', 'pdf_colorstack')
     whatsit.stack = 0
     whatsit.data = self:pdf_colorstack_string()
-    node.write(whatsit)
+    return whatsit
+  end
+
+  function Color:write_pdf_colorstack_node()
+    node.write(self:create_pdf_colorstack_node())
   end
 
   return Color
