@@ -1,5 +1,8 @@
 \documentclass{ltxdoc}
 
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -62,6 +65,134 @@ CTAN provides an overview page on the subject of
 \href{https://www.ctan.org/topic/colour}
 {Colour: packages to typesetting in colour}.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Lua interface / API}
+
+\subsection{Class “Color”}
+
+\subsubsection{Fields}
+
+\paragraph{Color.r}
+
+Red component.
+
+\paragraph{Color.g}
+
+Green component.
+
+\paragraph{Color.b}
+
+Blue component.
+
+\paragraph{Color.a}
+
+Alpha component.
+
+\subsubsection{Methods}
+
+\paragraph{Color:clone ()}
+
+Clone color
+
+\paragraph{Color:set (value)}
+
+Set color to value.
+
+\paragraph{Color:rgb ()}
+
+Get rgb values.
+
+\paragraph{Color:rgba ()}
+
+Get rgba values.
+
+\paragraph{Color:hsv ()}
+
+Get hsv values.
+
+\paragraph{Color:hsva ()}
+
+Get hsv values.
+
+\paragraph{Color:hsl ()}
+
+Get hsl values.
+
+\paragraph{Color:hsla ()}
+
+Get hsl values.
+
+\paragraph{Color:hwb ()}
+
+Get hwb values.
+
+\paragraph{Color:hwba ()}
+
+Get hwb values.
+
+\paragraph{Color:cmyk ()}
+
+Get cmyk values.
+
+\paragraph{Color:rotate (value)}
+
+Rotate hue of color.
+
+\paragraph{Color:invert ()}
+
+Invert the color.
+
+\paragraph{Color:grey ()}
+
+Reduce saturation to 0.
+
+\paragraph{Color:blackOrWhite (lightness)}
+
+Set to black or white depending on lightness.
+
+\paragraph{Color:mix (other, strength)}
+
+Mix two colors together.
+
+\paragraph{Color:complement ()}
+
+Generate complementary color.
+
+\paragraph{Color:analogous ()}
+
+Generate analogous color scheme.
+
+\paragraph{Color:triad ()}
+
+Generate triadic color scheme.
+
+\paragraph{Color:tetrad ()}
+
+Generate tetradic color scheme.
+
+\paragraph{Color:compound ()}
+
+Generate compound color scheme.
+
+\paragraph{Color:evenlySpaced (n, r)}
+
+Generate evenly spaced color scheme.
+
+\paragraph{Color:tostring (format)}
+
+Get string representation of color.
+
+\paragraph{Color:band (a, b)}
+
+Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJIT 2.1.0-beta3
+
+\paragraph{Color:isColor (color)}
+
+Check whether color is a Color.
+
 \clearpage
 
 \section{Implementation}
@@ -83,6 +214,22 @@ CTAN provides an overview page on the subject of
 \subsection{farbe.tex}
 
 \inputminted[linenos=true]{latex}{farbe.tex}
+
+%%
+%
+%%
+
+\clearpage
+
+\subsection{farbe.sty}
+
+\inputminted[linenos=true]{latex}{farbe.sty}
+
+%%
+%
+%%
+
+\clearpage
 
 \changes{0.1.0}{2022/12/30}{Inital release}
 

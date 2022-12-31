@@ -1,4 +1,4 @@
-%% farbe.tex
+%% farbe.sty
 %% Copyright 2022 Josef Friedrich
 %
 % This work may be distributed and/or modified under the
@@ -16,12 +16,7 @@
 % This work consists of the files farbe.lua, farbe.tex,
 % and farbe.sty.
 
-\directlua
-{
-  farbe = require('farbe.lua')
-}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{farbe}[2022/12/31 v0.1.0 Color management (conversion, names) for LuaTeX implemented in Lua.]
 
-\def\FarbeColor#1
-{%
-  \directlua{farbe.write_pdf_colorstack_node('#1')}%
-}
+\input farbe.tex
