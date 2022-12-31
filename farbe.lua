@@ -15,7 +15,9 @@
 --
 -- This work consists of the files farbe.lua, farbe.tex,
 -- and farbe.sty.
+
 ---@class Node
+
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 local colors = {
   -- base colors
@@ -514,8 +516,9 @@ local colors = {
 
 --- https://luarocks.org/modules/Firanel/lua-color
 --- Copyright (c) 2021 Firanel
+
 ---https://github.com/Firanel/lua-color/blob/master/util/bitwise.lua
-local function load_bitwise_functions()
+local bitwise = (function()
   -- Implementations of bitwise operators so that lua-color can be used
   -- with Lua 5.1 and LuaJIT 2.1.0-beta3 (e.g. inside Neovim).
 
@@ -596,10 +599,10 @@ local function load_bitwise_functions()
     bit_lshift = bit_lshift,
     bit_rshift = bit_rshift,
   }
-end
+end)()
 
 --- https://github.com/Firanel/lua-color/blob/master/util/class.lua
-local function load_class_function()
+local class = (function()
 
   --
   --------------------------------------------------------------------------------
@@ -668,10 +671,10 @@ local function load_class_function()
   end
 
   return class
-end
+end)()
 
 ---https://github.com/Firanel/lua-color/blob/master/util/init.lua
-local function load_utils_functions()
+local utils = (function()
   local function min_ind(first, ...)
     local min, ind = first, 1
     for i, v in ipairs { ... } do
@@ -715,7 +718,7 @@ local function load_utils_functions()
     clamp = clamp,
     map = map,
   }
-end
+end)()
 
 --- https://github.com/Firanel/lua-color/blob/master/init.lua
 local Color = (function()
@@ -724,11 +727,7 @@ local Color = (function()
   --
   -- @classmod Color
 
-  local utils = load_utils_functions()
-  local class = load_class_function()
-
   -- Lua 5.1 compat
-  local bitwise = load_bitwise_functions()
   local bit_and = bitwise.bit_and
   local bit_lshift = bitwise.bit_lshift
   local bit_rshift = bitwise.bit_rshift
