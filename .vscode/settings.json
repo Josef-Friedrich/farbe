@@ -6,23 +6,27 @@
     "node",
     "status",
     "tex",
-    "unicode"
+    "unicode",
+    "describe",
+    "it",
+    "setup",
+    "teardown"
   ],
   "latex-workshop.latex.autoBuild.run": "never",
   "files.exclude": {
+    "**/_minted*/": true,
     "**/*.aux": true,
-    "**/*.log": true,
-    "**/*.pdf": true,
     "**/*.fdb_latexmk": true,
-    "**/*.synctex.gz": true,
     "**/*.fls": true,
+    "**/*.glo": true,
     "**/*.hd": true,
     "**/*.idx": true,
     "**/*.ilg": true,
-    "**/*.glo": true,
     "**/*.ind": true,
+    "**/*.log": true,
     "**/*.out": true,
-    "**/*.toc": true,
-    "**/_minted*/": true
+    "**/*.pdf": true,
+    "**/*.synctex.gz": true,
+    "**/*.toc": true
   }
 }
