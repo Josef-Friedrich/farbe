@@ -25,3 +25,8 @@
 {%
   \directlua{farbe.write_pdf_colorstack_node('#1')}%
 }
+
+\def\FarbeBox#1
+{%
+  \directlua{farbe.Color('#1'):write_box()}%
+}

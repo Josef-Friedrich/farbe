@@ -11,5 +11,5 @@ _minted*/
 *.out
 *.pdf
 *.synctex
-*.synctx.gz
+*.synctex.gz
 *.toc

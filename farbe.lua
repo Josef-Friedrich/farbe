@@ -15,7 +15,6 @@
 --
 -- This work consists of the files farbe.lua, farbe.tex,
 -- and farbe.sty.
-
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 local colors = {
   -- base colors
@@ -1709,17 +1708,41 @@ local Color = (function()
 
   ---Create a PDF colorstack node.
   ---
-  ---@return Node
-  function Color:create_pdf_colorstack_node()
-    local whatsit = node.new('whatsit', 'pdf_colorstack')
-    whatsit.stack = 0
-    whatsit.data = self:format_pdf_colorstack_string()
+  ---@param command "set"|"push"|"pop"|"current"
+  ---
+  ---@return PdfColorstackWhatsitNode
+  function Color:create_pdf_colorstack_node(command)
+    local whatsit = node.new('whatsit', 'pdf_colorstack') --[[@as PdfColorstackWhatsitNode]]
+    if command == 'set' then
+      whatsit.command = 0
+    elseif command == 'push' then
+      whatsit.command = 1
+    elseif command == 'pop' then
+      whatsit.command = 2
+    elseif command == 'current' then
+      whatsit.command = 3
+    end
+    if command ~= 'pop' then
+      whatsit.data = self:format_pdf_colorstack_string()
+    end
     return whatsit
   end
 
   ---Write a PDF colorstock node using `node.write()`.
-  function Color:write_pdf_colorstack_node()
-    node.write(self:create_pdf_colorstack_node())
+  ---
+  ---@param command "set"|"push"|"pop"|"current"
+  ---
+  function Color:write_pdf_colorstack_node(command)
+    node.write(self:create_pdf_colorstack_node(command))
+  end
+
+  function Color:write_box()
+    self:write_pdf_colorstack_node('push')
+    local rule = node.new('rule') --[[@as RuleNode]]
+    rule.width = tex.sp('1cm')
+    rule.height = tex.sp('1cm')
+    node.write(rule)
+    self:write_pdf_colorstack_node('pop')
   end
 
   return Color
