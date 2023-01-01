@@ -23,7 +23,7 @@
 
 \def\FarbeColor#1
 {%
-  \directlua{farbe.write_pdf_colorstack_node('#1')}%
+  \directlua{farbe.Color('#1'):write_pdf_colorstack_node()}%
 }
 
 \def\FarbeBox#1

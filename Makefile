@@ -6,9 +6,10 @@ installdir = $(texmftex)/$(jobname)
 all: install
 
 install:
-	cp -f $(jobname).tex $(installdir)
-	cp -f $(jobname).sty $(installdir)
-	cp -f $(jobname).lua $(installdir)
+	mkdir -p $(installdir)
+	cp -f $(jobname).tex $(installdir)/
+	cp -f $(jobname).sty $(installdir)/
+	cp -f $(jobname).lua $(installdir)/
 
 test: install test_lua
 

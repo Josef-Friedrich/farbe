@@ -777,6 +777,10 @@ local Color = (function()
   --- Color class
   local Color = class(nil, function(this, value)
     if value then
+      if type(value) == 'string' then
+        -- # gets expanded to ##
+        value = string.gsub(value, '^##', '#')
+      end
       this:set(value)
     end
   end, { __is_color = true, r = 0, g = 0, b = 0, a = 1 })
@@ -1751,8 +1755,4 @@ end)()
 
 return {
   Color = Color,
-  write_pdf_colorstack_node = function(color_spec)
-    local color = Color(color_spec)
-    color:write_pdf_colorstack_node()
-  end,
 }
