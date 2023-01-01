@@ -15,7 +15,7 @@
 --
 -- This work consists of the files farbe.lua, farbe.tex,
 -- and farbe.sty.
----@class Node
+
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
 local colors = {
   -- base colors
