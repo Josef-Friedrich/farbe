@@ -199,7 +199,7 @@ local colors = {
   Yellow = { 1, 1, 1 },
   YellowGreen = { 0.604, 0.804, 0.804 },
 
-  --- x11
+  ---x11
   AntiqueWhite1 = { 1, 0.936, 0.936 },
   AntiqueWhite2 = { 0.932, 0.875, 0.875 },
   AntiqueWhite3 = { 0.804, 0.752, 0.752 },
@@ -612,10 +612,10 @@ local class = (function()
   -- Code based on:
   -- http://lua-users.org/wiki/SimpleLuaClasses
 
-  --- Helper function to create classes
-  --
-  -- @usage local Color = class(function () --[[ constructor ]] end)
-  -- @usage local Color2 = class(
+  ---Helper function to create classes
+  ---
+  ---@usage local Color = class(function () --[[ constructor ]] end)
+  ---@usage local Color2 = class(
   --   Color,
   --   function () --[[ constructor ]] end,
   --   { prop_a = "some value" }
@@ -745,18 +745,18 @@ local convert = (function()
 
   ---https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
   local function cmyk_to_rgb(c, m, y, k)
-    --- texmf-dist/tex/context/base/mkiv/attr-col.lua
+    ---texmf-dist/tex/context/base/mkiv/attr-col.lua
     -- local d = 1.0 - k
     -- local r = 1.0 - math.min(1.0, c * d + k)
     -- local g = 1.0 - math.min(1.0, m * d + k)
     -- local b = 1.0 - math.min(1.0, y * d + k)
 
-    --- texmf-dist/tex/context/base/mkiv/attr-col.lua
+    ---texmf-dist/tex/context/base/mkiv/attr-col.lua
     -- local r = 1.0 - math.min(1.0, c + k)
     -- local g = 1.0 - math.min(1.0, m + k)
     -- local b = 1.0 - math.min(1.0, y + k)
 
-    --- https://github.com/Firanel/lua-color/blob/eba73e53e9abd2e8da4d56b016fd77b45c2f3b79/init.lua#L335-L340
+    ---https://github.com/Firanel/lua-color/blob/eba73e53e9abd2e8da4d56b016fd77b45c2f3b79/init.lua#L335-L340
     local K = 1 - k
     local r = (1 - c) * K
     local g = (1 - m) * K
@@ -896,10 +896,25 @@ local convert = (function()
 end)()
 
 --- https://github.com/Firanel/lua-color/blob/master/init.lua
+
+---The Class Color is the main class of the submodule. It represents a
+---RGB color.
+---
+---@class Color
+---@field r number # Red component.
+---@field g number # Green component.
+---@field b number # Blue component.
+---@field a number # Alpha component.
+---
+---@function Color:__call
+---
+---@param value Color string|table|Color value (default: `nil`)
+---
+---@see Color:set
 local Color = (function()
 
-  --- Parse, convert and manipulate color values.
-  --
+  ---Parse, convert and manipulate color values.
+  ---
   -- @classmod Color
 
   -- Lua 5.1 compat
@@ -941,27 +956,27 @@ local Color = (function()
 
   -- Color
 
-  --- Color constructor.
-  --
+  ---Color constructor.
+  ---
   -- @function Color:__call
-  --
-  -- @tparam ?string|table|Color value Color value (default: `nil`)
-  --
-  -- @see Color:set
+  ---
+  ---@param ?string|table|Color value Color value (default: `nil`)
+  ---
+  ---@see Color:set
 
-  --- Red component.
+  ---Red component.
   -- @field r
 
-  --- Green component.
+  ---Green component.
   -- @field g
 
-  --- Blue component.
+  ---Blue component.
   -- @field b
 
-  --- Alpha component.
+  ---Alpha component.
   -- @field a
 
-  --- Color class
+  ---Color class
   local Color = class(nil, function(this, value)
     if value then
       if type(value) == 'string' then
@@ -972,14 +987,14 @@ local Color = (function()
     end
   end, { __is_color = true, r = 0, g = 0, b = 0, a = 1 })
 
-  --- Clone color
-  --
-  -- @treturn Color copy
+  ---Clone color
+  ---
+  ---@return Color copy
   function Color:clone()
     return Color(self)
   end
 
-  --- Set color to value.
+  ---Set color to value.
   -- <br>
   -- Called by constructor
   -- <br><br>
@@ -1030,19 +1045,19 @@ local Color = (function()
   --   otherwise it will be treated as hsv saturation.
   --  </li>
   -- </ul>
-  --
-  -- @see Color:__call
-  --
-  -- @tparam string|table|Color value Color
-  --
-  -- @treturn Color self
-  --
-  -- @usage color:set "#f1f1f1"
-  -- @usage color:set "rgba(241, 241, 241, 0.5)"
-  -- @usage color:set "hsl 180 100% 20%"
-  -- @usage color:set { r = 0.255, g = 0.729, b = 0.412 }
-  -- @usage color:set { 0.255, 0.729, 0.412 } -- same as above
-  -- @usage color:set { h = 0.389, s = 0.65, v = 0.73 }
+  ---
+  ---@see Color:__call
+  ---
+  ---@param value string|table|Color
+  ---
+  ---@return Color self
+  ---
+  ---@usage color:set "#f1f1f1"
+  ---@usage color:set "rgba(241, 241, 241, 0.5)"
+  ---@usage color:set "hsl 180 100% 20%"
+  ---@usage color:set { r = 0.255, g = 0.729, b = 0.412 }
+  ---@usage color:set { 0.255, 0.729, 0.412 } -- same as above
+  ---@usage color:set { h = 0.389, s = 0.65, v = 0.73 }
   function Color:set(value)
     assert(value)
 
@@ -1322,21 +1337,21 @@ local Color = (function()
     return self
   end
 
-  --- Get rgb values.
-  --
-  -- @treturn number[0;1] red
-  -- @treturn number[0;1] green
-  -- @treturn number[0;1] blue
+  ---Get rgb values.
+  ---
+  ---@return number[0;1] red
+  ---@return number[0;1] green
+  ---@return number[0;1] blue
   function Color:rgb()
     return self.r, self.g, self.b
   end
 
-  --- Get rgba values.
-  --
-  -- @treturn number[0;1] red
-  -- @treturn number[0;1] green
-  -- @treturn number[0;1] blue
-  -- @treturn number[0;1] alpha
+  ---Get rgba values.
+  ---
+  ---@return number[0;1] red
+  ---@return number[0;1] green
+  ---@return number[0;1] blue
+  ---@return number[0;1] alpha
   function Color:rgba()
     return self.r, self.g, self.b, self.a
   end
@@ -1364,32 +1379,32 @@ local Color = (function()
     return hue, saturation, max, min
   end
 
-  --- Get hsv values.
-  --
-  -- @treturn number[0;1] hue
-  -- @treturn number[0;1] saturation
-  -- @treturn number[0;1] value
+  ---Get hsv values.
+  ---
+  ---@return number[0;1] hue
+  ---@return number[0;1] saturation
+  ---@return number[0;1] value
   function Color:hsv()
     local h, s, v = self:_hsvm()
     return h, s, v
   end
 
-  --- Get hsv values.
-  --
-  -- @treturn number[0;1] hue
-  -- @treturn number[0;1] saturation
-  -- @treturn number[0;1] value
-  -- @treturn number[0;1] alpha
+  ---Get hsv values.
+  ---
+  ---@return number[0;1] hue
+  ---@return number[0;1] saturation
+  ---@return number[0;1] value
+  ---@return number[0;1] alpha
   function Color:hsva()
     local h, s, v = self:_hsvm()
     return h, s, v, self.a
   end
 
-  --- Get hsl values.
-  --
-  -- @treturn number[0;1] hue
-  -- @treturn number[0;1] saturation
-  -- @treturn number[0;1] lightness
+  ---Get hsl values.
+  ---
+  ---@return number[0;1] hue
+  ---@return number[0;1] saturation
+  ---@return number[0;1] lightness
   function Color:hsl()
     local hue, _, max, min = self:_hsvm()
     local lightness = (max + min) / 2
@@ -1404,22 +1419,22 @@ local Color = (function()
     return hue, saturation, lightness
   end
 
-  --- Get hsl values.
-  --
-  -- @treturn number[0;1] hue
-  -- @treturn number[0;1] saturation
-  -- @treturn number[0;1] lightness
-  -- @treturn number[0;1] alpha
+  ---Get hsl values.
+  ---
+  ---@return number[0;1] hue
+  ---@return number[0;1] saturation
+  ---@return number[0;1] lightness
+  ---@return number[0;1] alpha
   function Color:hsla()
     local h, s, l = self:hsl()
     return h, s, l, self.a
   end
 
-  --- Get hwb values.
-  --
-  -- @treturn number[0;1] hue
-  -- @treturn number[0;1] whiteness
-  -- @treturn number[0;1] blackness
+  ---Get hwb values.
+  ---
+  ---@return number[0;1] hue
+  ---@return number[0;1] whiteness
+  ---@return number[0;1] blackness
   function Color:hwb()
     local h, s, v = self:hsv()
     local w = (1 - s) * v
@@ -1427,36 +1442,36 @@ local Color = (function()
     return h, w, b
   end
 
-  --- Get hwb values.
-  --
-  -- @treturn number[0;1] hue
-  -- @treturn number[0;1] whiteness
-  -- @treturn number[0;1] blackness
-  -- @treturn number[0;1] alpha
+  ---Get hwb values.
+  ---
+  ---@return number[0;1] hue
+  ---@return number[0;1] whiteness
+  ---@return number[0;1] blackness
+  ---@return number[0;1] alpha
   function Color:hwba()
     local h, w, b = self:hwb()
     return h, w, b, self.a
   end
 
-  --- Get cmyk values.
-  --
-  -- @treturn number[0;1] cyan
-  -- @treturn number[0;1] magenta
-  -- @treturn number[0;1] yellow
-  -- @treturn number[0;1] key
+  ---Get cmyk values.
+  ---
+  ---@return number[0;1] cyan
+  ---@return number[0;1] magenta
+  ---@return number[0;1] yellow
+  ---@return number[0;1] key
   function Color:cmyk()
     return convert.rgb_to_cmyk(self.r, self.g, self.b)
   end
 
-  --- Rotate hue of color.
-  --
-  -- @tparam number[0;1]|table value Part of full turn or table containing degree or radians
-  --
-  -- @treturn Color self
-  --
-  -- @usage color:rotate(0.5)
-  -- @usage color:rotate {deg=180}
-  -- @usage color:rotate {rad=math.pi}
+  ---Rotate hue of color.
+  ---
+  ---@param number[0;1]|table value Part of full turn or table containing degree or radians
+  ---
+  ---@return Color self
+  ---
+  ---@usage color:rotate(0.5)
+  ---@usage color:rotate {deg=180}
+  ---@usage color:rotate {rad=math.pi}
   function Color:rotate(value)
     local r
     if type(value) == 'number' then
@@ -1476,9 +1491,9 @@ local Color = (function()
     return self
   end
 
-  --- Invert the color.
-  --
-  -- @treturn Color self
+  ---Invert the color.
+  ---
+  ---@return Color self
   function Color:invert()
     self.r = 1 - self.r
     self.g = 1 - self.g
@@ -1486,20 +1501,20 @@ local Color = (function()
     return self
   end
 
-  --- Reduce saturation to 0.
-  --
-  -- @treturn Color self
+  ---Reduce saturation to 0.
+  ---
+  ---@return Color self
   function Color:grey()
     local h, _, v = self:hsv()
     self:set{ h = h, s = 0, v = v, a = self.a }
     return self
   end
 
-  --- Set to black or white depending on lightness.
-  --
-  -- @tparam ?number[0;1] lightness Cutoff point (Default: 0.5)
-  --
-  -- @treturn Color self
+  ---Set to black or white depending on lightness.
+  ---
+  ---@param ?number[0;1] lightness Cutoff point (Default: 0.5)
+  ---
+  ---@return Color self
   function Color:blackOrWhite(lightness)
     local _, _, l = self:hsl()
     local v = l > lightness and 1 or 0
@@ -1509,12 +1524,12 @@ local Color = (function()
     return self
   end
 
-  --- Mix two colors together.
-  --
-  -- @tparam Color other
-  -- @tparam ?number strength 0 results in self, 1 results in other (Default: 0.5)
-  --
-  -- @treturn Color self
+  ---Mix two colors together.
+  ---
+  ---@param Color other
+  ---@param ?number strength 0 results in self, 1 results in other (Default: 0.5)
+  ---
+  ---@return Color self
   function Color:mix(other, strength)
     if strength == nil then
       strength = 0.5
@@ -1526,29 +1541,29 @@ local Color = (function()
     return self
   end
 
-  --- Generate complementary color.
-  --
-  -- @treturn Color
+  ---Generate complementary color.
+  ---
+  ---@return Color
   function Color:complement()
     return Color(self):rotate(0.5)
   end
 
-  --- Generate analogous color scheme.
-  --
-  -- @treturn Color
-  -- @treturn Color self
-  -- @treturn Color
+  ---Generate analogous color scheme.
+  ---
+  ---@return Color
+  ---@return Color self
+  ---@return Color
   function Color:analogous()
     local h, s, v = self:hsv()
     return Color { h = (h - 1 / 12) % 1, s = s, v = v, a = self.a },
       self, Color { h = (h + 1 / 12) % 1, s = s, v = v, a = self.a }
   end
 
-  --- Generate triadic color scheme.
-  --
-  -- @treturn Color self
-  -- @treturn Color
-  -- @treturn Color
+  ---Generate triadic color scheme.
+  ---
+  ---@return Color self
+  ---@return Color
+  ---@return Color
   function Color:triad()
     local h, s, v = self:hsv()
     return self,
@@ -1556,12 +1571,12 @@ local Color = (function()
       Color { h = (h + 2 / 3) % 1, s = s, v = v, a = self.a }
   end
 
-  --- Generate tetradic color scheme.
-  --
-  -- @treturn Color self
-  -- @treturn Color
-  -- @treturn Color
-  -- @treturn Color
+  ---Generate tetradic color scheme.
+  ---
+  ---@return Color self
+  ---@return Color
+  ---@return Color
+  ---@return Color
   function Color:tetrad()
     local h, s, v = self:hsv()
     return self,
@@ -1570,24 +1585,24 @@ local Color = (function()
       Color { h = (h + 3 / 4) % 1, s = s, v = v, a = self.a }
   end
 
-  --- Generate compound color scheme.
-  --
-  -- @treturn Color
-  -- @treturn Color self
-  -- @treturn Color
+  ---Generate compound color scheme.
+  ---
+  ---@return Color
+  ---@return Color self
+  ---@return Color
   function Color:compound()
     local ca, _, cb = self:complement():analogous()
     return ca, self, cb
   end
 
-  --- Generate evenly spaced color scheme.
+  ---Generate evenly spaced color scheme.
   -- <br>
   -- Generalization of `triad` and `tetrad`.
-  --
-  -- @tparam int     n Return n colors
-  -- @tparam ?number r Space colors over r rotations (Default: 1)
-  --
-  -- @treturn {Color,...} Table with n colors including self at index 1
+  ---
+  ---@param int     n Return n colors
+  ---@param ?number r Space colors over r rotations (Default: 1)
+  ---
+  ---@return {Color,...} Table with n colors including self at index 1
   function Color:evenlySpaced(n, r)
     assert(n > 0, 'n needs to be greater than 0')
     r = r or 1
@@ -1606,16 +1621,16 @@ local Color = (function()
     return res
   end
 
-  --- Get string representation of color.
-  --
+  ---Get string representation of color.
+  ---
   -- If `format` is `nil`, `color:tostring()` is the same as `tostring(color)`.
-  --
-  -- @tparam ?string format One of: `#fff`, `#ffff`, `#ffffff`, `#ffffffff`,
+  ---
+  ---@param ?string format One of: `#fff`, `#ffff`, `#ffffff`, `#ffffffff`,
   --  rgb, rgba, hsv, hsva, hsl, hsla, hwb, hwba, ncol, cmyk
-  --
-  -- @treturn string
-  --
-  -- @see Color:__tostring
+  ---
+  ---@return string
+  ---
+  ---@see Color:__tostring
   function Color:tostring(format)
     if format == nil then
       return tostring(self)
@@ -1708,13 +1723,13 @@ local Color = (function()
     return tostring(self)
   end
 
-  --- Get color in rgb hex notation.
+  ---Get color in rgb hex notation.
   -- <br>
   -- only adds alpha value if `color.a < 1`
-  --
-  -- @treturn string `#rrggbb` | `#rrggbbaa`
-  --
-  -- @see Color:tostring
+  ---
+  ---@return string `#rrggbb` | `#rrggbbaa`
+  ---
+  ---@see Color:tostring
   function Color:__tostring()
     if self.a < 1 then
       return string.format('#%02x%02x%02x%02x',
@@ -1726,41 +1741,41 @@ local Color = (function()
     end
   end
 
-  --- Check if colors are equal.
-  --
-  -- @tparam Color other
-  --
-  -- @treturn boolean all values are equal
+  ---Check if colors are equal.
+  ---
+  ---@param Color other
+  ---
+  ---@return boolean all values are equal
   function Color:__eq(other)
     return
       self.r == other.r and self.g == other.g and self.b == other.b and
         self.a == other.a
   end
 
-  --- Checks whether color is darker.
-  --
-  -- @tparam Color other
-  --
-  -- @treturn boolean self is darker than other
+  ---Checks whether color is darker.
+  ---
+  ---@param Color other
+  ---
+  ---@return boolean self is darker than other
   function Color:__lt(other)
     local _, _, la = self:hsl()
     local _, _, lb = other:hsl()
     return la < lb
   end
 
-  --- Checks whether color is as dark or darker.
-  --
-  -- @tparam Color other
-  --
-  -- @treturn boolean self is as dark or darker than other
+  ---Checks whether color is as dark or darker.
+  ---
+  ---@param Color other
+  ---
+  ---@return boolean self is as dark or darker than other
   function Color:__le(other)
     local _, _, la = self:hsl()
     local _, _, lb = other:hsl()
     return la <= lb
   end
 
-  --- Iterate through color.
-  --
+  ---Iterate through color.
+  ---
   -- Iterates through r, g, b, and a.
   function Color:__pairs()
     local function iter(tbl, k)
@@ -1778,50 +1793,50 @@ local Color = (function()
     return iter, self, nil
   end
 
-  --- Get inverted clone of color.
-  --
-  -- @treturn Color
+  ---Get inverted clone of color.
+  ---
+  ---@return Color
   function Color:__unm()
     return Color(self):invert()
   end
 
-  --- Mix two colors evenly.
-  --
-  -- @tparam Color a first color
-  -- @tparam Color b second color
-  --
-  -- @treturn Color new color
-  --
-  -- @see Color:mix
+  ---Mix two colors evenly.
+  ---
+  ---@param Color a first color
+  ---@param Color b second color
+  ---
+  ---@return Color new color
+  ---
+  ---@see Color:mix
   function Color.__add(a, b)
     assert(Color.isColor(a) and Color.isColor(b),
       'Can only add two colors.')
     return Color(a):mix(b)
   end
 
-  --- Complement of even mix.
-  --
-  -- @tparam Color a first color
-  -- @tparam Color b second color
-  --
-  -- @treturn Color new color
-  --
-  -- @see Color:mix
-  -- @see Color.__add
+  ---Complement of even mix.
+  ---
+  ---@param Color a first color
+  ---@param Color b second color
+  ---
+  ---@return Color new color
+  ---
+  ---@see Color:mix
+  ---@see Color.__add
   function Color.__sub(a, b)
     assert(Color.isColor(a) and Color.isColor(b),
       'Can only add two colors.')
     return Color(a):mix(b):rotate(0.5)
   end
 
-  --- Apply rgb mask to color.
-  --
-  -- @tparam Color|number a color or mask
-  -- @tparam Color|number b color or mask (if a and b are colors b is used as mask)
-  --
-  -- @treturn Color new color
-  --
-  -- @usage local new_col = color & 0xff00ff -- get new color without the green channel
+  ---Apply rgb mask to color.
+  ---
+  ---@param Color|number a color or mask
+  ---@param Color|number b color or mask (if a and b are colors b is used as mask)
+  ---
+  ---@return Color new color
+  ---
+  ---@usage local new_col = color & 0xff00ff -- get new color without the green channel
   function Color.__band(a, b)
     local color, mask
     if Color.isColor(a) and type(b) == 'number' then
@@ -1849,31 +1864,31 @@ local Color = (function()
     }
   end
 
-  --- Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJIT 2.1.0-beta3 (e.g. inside Neovim), which don't provide native support for bitwise operators.
-  --
-  -- @tparam Color|number a color or mask
-  -- @tparam Color|number b color or mask (if a and b are colors b is used as mask)
-  --
-  -- @treturn Color new color
-  --
-  -- @usage local new_col = Color.band(color, 0xff00ff) -- get new color without the green channel
+  ---Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJIT 2.1.0-beta3 (e.g. inside Neovim), which don't provide native support for bitwise operators.
+  ---
+  ---@param a Color|number # color or mask
+  ---@param b Color|number # color or mask (if a and b are colors b is used as mask)
+  ---
+  ---@return Color new color
+  ---
+  ---@usage local new_col = Color.band(color, 0xff00ff) -- get new color without the green channel
   function Color.band(a, b)
     return Color.__band(a, b)
   end
 
-  --- Check whether `color` is a Color.
-  --
-  -- @param color
-  --
-  -- @treturn boolean is a color
-  --
-  -- @usage if Color.isColor(color) then print "It's a color!" end
+  ---Check whether `color` is a Color.
+  ---
+  ---@param color Color
+  ---
+  ---@return boolean # is a color
+  ---
+  ---@usage if Color.isColor(color) then print "It's a color!" end
   function Color.isColor(color)
     return color ~= nil and color.__is_color == true
   end
 
   ---Format a PDF colorstack string. This string can be assigned to the
-  --- `node.data` field of a PDF colorstock node.
+  ---`node.data` field of a PDF colorstock node.
   ---
   ---@return string # A string like this example `1 0 0 rg 1 0 0 RG`
   function Color:format_pdf_colorstack_string()
@@ -1932,4 +1947,4 @@ local Color = (function()
 
 end)()
 
-return { convert = convert, Color = Color }
+return { convert = convert, Color = Color --[[@as Color]] }

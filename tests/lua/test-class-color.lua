@@ -33,6 +33,9 @@ describe('Class “Color”', function()
     assert.is.equal(Color('rgb(0,0,0)'), black)
     assert.is.equal(Color('rgb(0.0,0.0,0.0)'), black)
     assert.is.equal(Color('rgb(255, 255, 255)'), white)
+    assert.is.equal(Color('black'), black)
+    assert.is.equal(Color('white'), white)
+
   end)
 
   it('Method cmyk()', function()
