@@ -16,6 +16,14 @@
 -- This work consists of the files farbe.lua, farbe.tex,
 -- and farbe.sty.
 -- https://github.com/latex3/xcolor/blob/main/xcolor.dtx
+---@alias r number red (0.0 - 1.0)
+---@alias g number green (0.0 - 1.0)
+---@alias b number blue (0.0 - 1.0)
+---@alias a number alpha (0.0 - 1.0)
+---@alias c number cyan (0.0 - 1.0)
+---@alias m number magenta (0.0 - 1.0)
+---@alias y number yellow (0.0 - 1.0)
+---@alias k number key(black) (0.0 - 1.0)
 local colors = {
   -- base colors
   black = { 0, 0, 0 },
@@ -708,6 +716,175 @@ local utils = (function()
   }
 end)()
 
+---Source: [texmf-dist/tex/context/base/mkiv/attr-col.lua](https://git.texlive.info/texlive/tree/Master/texmf-dist/tex/context/base/mkiv/attr-col.lua)
+local convert = (function()
+
+  ---
+  ---https://www.rapidtables.com/convert/color/rgb-to-cmyk.html
+  ---https://www.101computing.net/cmyk-to-rgb-conversion-algorithm/
+  ---
+  ---@param r r # red (0.0 - 1.0)
+  ---@param g g # green (0.0 - 1.0)
+  ---@param b b # blue (0.0 - 1.0)
+  ---
+  ---@return c c # cyan (0.0 - 1.0)
+  ---@return m m # magenta (0.0 - 1.0)
+  ---@return y y # yellow (0.0 - 1.0)
+  ---@return k k # key(black) (0.0 - 1.0)
+  local function rgb_to_cmyk(r, g, b)
+    local K = math.max(r, g, b)
+    if K == 0 then
+      return 0.0, 0.0, 0.0, 1.0
+    end
+    local k = 1 - K
+    local c = (K - r) / K
+    local m = (K - g) / K
+    local y = (K - b) / K
+    return c, m, y, k
+  end
+
+  local function cmyk_to_rgb(c, m, y, k)
+    if not c then
+      return 0, 0, 0, 1
+    elseif cmykrgbmode == 1 then
+      local d = 1.0 - k
+      return 1.0 - math.min(1.0, c * d + k),
+        1.0 - math.min(1.0, m * d + k), 1.0 - math.min(1.0, y * d + k)
+    else
+      return 1.0 - math.min(1.0, c + k), 1.0 - math.min(1.0, m + k),
+        1.0 - math.min(1.0, y + k)
+    end
+  end
+
+  local function rgb_to_gray(r, g, b)
+    if not r then
+      return 0
+    end
+    local w = colors.weightgray
+    if w == true then
+      return .30 * r + .59 * g + .11 * b
+    elseif not w then
+      return r / 3 + g / 3 + b / 3
+    else
+      return w[1] * r + w[2] * g + w[3] * b
+    end
+  end
+
+  local function cmyk_to_gray(c, m, y, k)
+    return rgb_to_gray(cmyk_to_rgb(c, m, y, k))
+  end
+
+  -- http://en.wikipedia.org/wiki/HSI_color_space
+  -- http://nl.wikipedia.org/wiki/HSV_(kleurruimte)
+
+  -- 	h /= 60;        // sector 0 to 5
+  -- 	i = floor( h );
+  -- 	f = h - i;      // factorial part of h
+
+  local function hsv_to_rgb(h, s, v)
+    if s > 1 then
+      s = 1
+    elseif s < 0 then
+      s = 0
+    elseif s == 0 then
+      return v, v, v
+    end
+    if v > 1 then
+      s = 1
+    elseif v < 0 then
+      v = 0
+    end
+    if h < 0 then
+      h = 0
+    elseif h >= 360 then
+      h = mod(h, 360)
+    end
+    local hd = h / 60
+    local hi = floor(hd)
+    local f = hd - hi
+    local p = v * (1 - s)
+    local q = v * (1 - f * s)
+    local t = v * (1 - (1 - f) * s)
+    if hi == 0 then
+      return v, t, p
+    elseif hi == 1 then
+      return q, v, p
+    elseif hi == 2 then
+      return p, v, t
+    elseif hi == 3 then
+      return p, q, v
+    elseif hi == 4 then
+      return t, p, v
+    elseif hi == 5 then
+      return v, p, q
+    else
+      print('error in hsv -> rgb', h, s, v)
+      return 0, 0, 0
+    end
+  end
+
+  local function rgb_to_hsv(r, g, b)
+    local offset, maximum, other_1, other_2
+    if r >= g and r >= b then
+      offset, maximum, other_1, other_2 = 0, r, g, b
+    elseif g >= r and g >= b then
+      offset, maximum, other_1, other_2 = 2, g, b, r
+    else
+      offset, maximum, other_1, other_2 = 4, b, r, g
+    end
+    if maximum == 0 then
+      return 0, 0, 0
+    end
+    local minimum = other_1 < other_2 and other_1 or other_2
+    if maximum == minimum then
+      return 0, 0, maximum
+    end
+    local delta = maximum - minimum
+    return (offset + (other_1 - other_2) / delta) * 60, delta / maximum,
+      maximum
+  end
+
+  local function gray_to_rgb(s) -- unweighted
+    return 1 - s, 1 - s, 1 - s
+  end
+
+  local function hsv_to_gray(h, s, v)
+    return rgb_to_gray(hsv_to_rgb(h, s, v))
+  end
+
+  local function gray_to_hsv(s)
+    return 0, 0, s
+  end
+
+  ---
+  ---@param h any # hue
+  ---@param black any # black
+  ---@param white any # white
+  ---
+  ---@return number r
+  ---@return number g
+  ---@return number b
+  local function hwb_to_rgb(h, black, white)
+    local r, g, b = hsv_to_rgb(h, 1, .5)
+    local f = 1 - white - black
+    return f * r + white, f * g + white, f * b + white
+  end
+
+  return {
+    rgb_to_cmyk = rgb_to_cmyk,
+    cmyk_to_rgb = cmyk_to_rgb,
+    rgb_to_gray = rgb_to_gray,
+    cmyk_to_gray = cmyk_to_gray,
+    hsv_to_rgb = hsv_to_rgb,
+    rgb_to_hsv = rgb_to_hsv,
+    gray_to_rgb = gray_to_rgb,
+    hsv_to_gray = hsv_to_gray,
+    gray_to_hsv = gray_to_hsv,
+    hwb_to_rgb = hwb_to_rgb,
+  }
+
+end)()
+
 --- https://github.com/Firanel/lua-color/blob/master/init.lua
 local Color = (function()
 
@@ -1260,13 +1437,7 @@ local Color = (function()
   -- @treturn number[0;1] yellow
   -- @treturn number[0;1] key
   function Color:cmyk()
-    local r, g, b = self.r, self.g, self.b
-    local K = math.max(r, g, b)
-    local k = 1 - K
-    local c = (K - r) / K
-    local m = (K - g) / K
-    local y = (K - b) / K
-    return c, m, y, k
+    return convert.rgb_to_cmyk(self.r, self.g, self.b)
   end
 
   --- Rotate hue of color.
@@ -1753,6 +1924,4 @@ local Color = (function()
 
 end)()
 
-return {
-  Color = Color,
-}
+return { convert = convert, Color = Color }

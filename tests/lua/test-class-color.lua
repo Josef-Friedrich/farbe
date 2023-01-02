@@ -13,4 +13,13 @@ describe('Class “Color”', function()
     assert.is.equal(color.a, 1.0)
   end)
 
+  it('Method cmyk()', function()
+    local color = Color('#000000')
+    local c, m, y, k = color:cmyk()
+    assert.is.equal(c, 0.0)
+    assert.is.equal(m, 0.0)
+    assert.is.equal(y, 0.0)
+    assert.is.equal(k, 1.0)
+  end)
+
 end)
