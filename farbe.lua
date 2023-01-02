@@ -743,17 +743,27 @@ local convert = (function()
     return c, m, y, k
   end
 
+  ---https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
   local function cmyk_to_rgb(c, m, y, k)
-    if not c then
-      return 0, 0, 0, 1
-    elseif cmykrgbmode == 1 then
-      local d = 1.0 - k
-      return 1.0 - math.min(1.0, c * d + k),
-        1.0 - math.min(1.0, m * d + k), 1.0 - math.min(1.0, y * d + k)
-    else
-      return 1.0 - math.min(1.0, c + k), 1.0 - math.min(1.0, m + k),
-        1.0 - math.min(1.0, y + k)
-    end
+    --- texmf-dist/tex/context/base/mkiv/attr-col.lua
+    -- local d = 1.0 - k
+    -- local r = 1.0 - math.min(1.0, c * d + k)
+    -- local g = 1.0 - math.min(1.0, m * d + k)
+    -- local b = 1.0 - math.min(1.0, y * d + k)
+
+    --- texmf-dist/tex/context/base/mkiv/attr-col.lua
+    -- local r = 1.0 - math.min(1.0, c + k)
+    -- local g = 1.0 - math.min(1.0, m + k)
+    -- local b = 1.0 - math.min(1.0, y + k)
+
+    --- https://github.com/Firanel/lua-color/blob/eba73e53e9abd2e8da4d56b016fd77b45c2f3b79/init.lua#L335-L340
+    local K = 1 - k
+    local r = (1 - c) * K
+    local g = (1 - m) * K
+    local b = (1 - y) * K
+
+    return r, g, b
+
   end
 
   local function rgb_to_gray(r, g, b)
@@ -1218,10 +1228,8 @@ local Color = (function()
       self.a = value.a or self.a
 
     elseif value.c ~= nil then
-      local k = 1 - value.k
-      self.r = (1 - value.c) * k
-      self.g = (1 - value.m) * k
-      self.b = (1 - value.y) * k
+      self.r, self.g, self.b = convert.cmyk_to_rgb(value.c, value.m,
+        value.y, value.k)
       self.a = 1
 
       -- table with hs[vl]
