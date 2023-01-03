@@ -21,6 +21,7 @@
     "${3rd}/busted/library",
     "${3rd}/luaassert/library",
     // https://github.com/Josef-Friedrich/LuaTeX_Lua-API
-    "~/repos/tex/lua-api/src"
+    "~/repos/tex/lua-api/library",
+    "~/texmf/tex",
   ]
 }
