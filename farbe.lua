@@ -2461,8 +2461,64 @@ local function print_color_table(scheme)
   end
 end
 
+---
+---@param operator string # The PDF color operator, e. g. `0.2 0.5 1 rg 0.2 0.5 1 RG`
+---
+---@return Color|nil
+local function convert_pdf_color_operator(operator)
+  operator = operator:lower()
+
+  ---
+  ---@param count_floats integer
+  ---@param suffix string
+  ---
+  ---@return string
+  local function build_pattern(count_floats, suffix)
+    local pattern_float = '(%d*%.?%d+)'
+
+    local patterns = {}
+    for i = 1, count_floats, 1 do
+      patterns[i] = pattern_float
+    end
+    patterns[count_floats + 1] = suffix
+
+    return table.concat(patterns, ' +')
+  end
+
+  local n = tonumber
+
+  local r, g, b = operator:match(build_pattern(3, 'rg'))
+  if r ~= nil then
+    return Color({ r = n(r), g = n(g), b = n(b) })
+  end
+
+  local c, m, y, k = operator:match(build_pattern(3, 'k'))
+  if c ~= nil then
+    return Color({ c = n(c), m = n(m), y = n(y), k = n(k) })
+  end
+
+  local gray = operator:match(build_pattern(1, 'g'))
+  if gray ~= nil then
+    return Color({ r = n(gray), g = n(gray), b = n(gray) })
+  end
+end
+
+---
+---@param name string # The name of the color.
+---@param operator string # The PDF color operator, e. g. `0.2 0.5 1 rg 0.2 0.5 1 RG`
+local function import_color(name, operator)
+  print(name, operator)
+
+  local color = convert_pdf_color_operator(operator)
+  print(color)
+  if color ~= nil then
+    colors[name] = { color.r, color.g, color.b }
+  end
+end
+
 return {
   convert = convert,
   Color = Color --[[@as Color]] ,
   print_color_table = print_color_table,
+  import_color = import_color,
 }
