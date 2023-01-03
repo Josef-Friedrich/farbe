@@ -11,7 +11,7 @@
 \usepackage{minted}
 \usepackage{multicol}
 \usepackage{luacode}
-\usepackage{syntax}
+\usepackage{farbe}
 
 \usemintedstyle{friendly}
 \BeforeBeginEnvironment{minted}{\begin{mdframed}}
@@ -64,6 +64,8 @@
 CTAN provides an overview page on the subject of
 \href{https://www.ctan.org/topic/colour}
 {Colour: packages to typesetting in colour}.
+
+\directlua{farbe.print_color_table()}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

@@ -1937,8 +1937,8 @@ local Color = (function()
   function Color:write_box()
     self:write_pdf_colorstack_node('push')
     local rule = node.new('rule') --[[@as RuleNode]]
-    rule.width = tex.sp('1cm')
-    rule.height = tex.sp('1cm')
+    rule.width = tex.sp('0.5cm')
+    rule.height = tex.sp('0.5cm')
     node.write(rule)
     self:write_pdf_colorstack_node('pop')
   end
@@ -1947,4 +1947,20 @@ local Color = (function()
 
 end)()
 
-return { convert = convert, Color = Color --[[@as Color]] }
+local function print_color_table()
+  for name, rgb in pairs(colors) do
+    -- local color = Color({ r = rgb[1], g = rgb[2], b = rgb[3] })
+    tex.print('\\par\\noindent')
+    tex.print(
+      '\\FarbeBox{rgba(' .. rgb[1] * 255 .. ', ' .. rgb[2] * 255 .. ', ' ..
+        rgb[3] * 255 .. ', ' .. '1}')
+
+    tex.print('\\quad{}' .. name)
+  end
+end
+
+return {
+  convert = convert,
+  Color = Color --[[@as Color]] ,
+  print_color_table = print_color_table,
+}
