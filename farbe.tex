@@ -18,7 +18,9 @@
 
 \directlua
 {
-  farbe = require('farbe.lua')
+  if farbe == nil then
+    farbe = require('farbe')
+  end
 }
 
 \def\FarbePdfLiteral#1{\csname\string\color@#1\endcsname}

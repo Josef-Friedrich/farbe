@@ -523,6 +523,36 @@ local schemes = {
   },
 }
 
+local log = (function()
+  local opts = { verbosity = 0 }
+
+  local function print_message(message, ...)
+    print(string.format(message, ...))
+  end
+
+  local function info(message, ...)
+    if opts.verbosity > 0 then
+      print_message(message, ...)
+    end
+  end
+
+  local function debug(message, ...)
+    if opts.verbosity > 1 then
+      print_message(message, ...)
+    end
+  end
+
+  local function verbose(message, ...)
+    if opts.verbosity > 2 then
+      print_message(message, ...)
+    end
+  end
+
+  return { opts = opts, info = info, debug = debug, verbose = verbose }
+end)()
+
+log.opts.verbosity = 3
+
 local colors = {
   -- base
   black = { 0, 0, 0 },
@@ -1244,6 +1274,9 @@ local convert = (function()
 
   ---https://www.rapidtables.com/convert/color/cmyk-to-rgb.html
   local function cmyk_to_rgb(c, m, y, k)
+    if not k then
+      k = 0
+    end
     ---texmf-dist/tex/context/base/mkiv/attr-col.lua
     -- local d = 1.0 - k
     -- local r = 1.0 - math.min(1.0, c * d + k)
@@ -1720,10 +1753,10 @@ local Color = (function()
       elseif #value == 8 then
         pattern = '(%x%x)(%x%x)(%x%x)(%x%x)'
       else
-        error 'Not a valid color'
+        error('Not a valid color: ' .. tostring(value))
       end
       local r, g, b, a = value:match(pattern)
-      assert(r ~= nil, 'Not a valid color')
+      assert(r ~= nil, 'Not a valid color: ' .. tostring(value))
       self.r = tonumber(r, 16) / div
       self.g = tonumber(g, 16) / div
       self.b = tonumber(b, 16) / div
@@ -2489,16 +2522,19 @@ local function convert_pdf_color_operator(operator)
 
   local r, g, b = operator:match(build_pattern(3, 'rg'))
   if r ~= nil then
+    log.debug('operator to RGB: %s %s %s', r, g, b)
     return Color({ r = n(r), g = n(g), b = n(b) })
   end
 
   local c, m, y, k = operator:match(build_pattern(3, 'k'))
   if c ~= nil then
+    log.debug('operator to CMYK: %s %s %s %s', c, m, y, k)
     return Color({ c = n(c), m = n(m), y = n(y), k = n(k) })
   end
 
   local gray = operator:match(build_pattern(1, 'g'))
   if gray ~= nil then
+    log.debug('operator to GRAY: %s', gray)
     return Color({ r = n(gray), g = n(gray), b = n(gray) })
   end
 end
@@ -2507,10 +2543,12 @@ end
 ---@param name string # The name of the color.
 ---@param operator string # The PDF color operator, e. g. `0.2 0.5 1 rg 0.2 0.5 1 RG`
 local function import_color(name, operator)
-  if colors[name] == nil then
+  if colors[name] ~= nil then
     return
   end
   local color = convert_pdf_color_operator(operator)
+  log.info('Import new color: name %s, operator: %s, converted: %s',
+    name, operator, color)
   if color ~= nil then
     colors[name] = { color.r, color.g, color.b }
   end
