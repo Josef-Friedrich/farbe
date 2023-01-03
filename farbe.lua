@@ -2507,10 +2507,10 @@ end
 ---@param name string # The name of the color.
 ---@param operator string # The PDF color operator, e. g. `0.2 0.5 1 rg 0.2 0.5 1 RG`
 local function import_color(name, operator)
-  print(name, operator)
-
+  if colors[name] == nil then
+    return
+  end
   local color = convert_pdf_color_operator(operator)
-  print(color)
   if color ~= nil then
     colors[name] = { color.r, color.g, color.b }
   end

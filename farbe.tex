@@ -24,7 +24,10 @@
 \def\FarbePdfLiteral#1{\csname\string\color@#1\endcsname}
 
 \def\FarbeImport#1{%
-  \directlua{farbe.import_color('#1', '\FarbePdfLiteral{#1}')}%
+  \directlua
+  {
+    farbe.import_color('#1', '\FarbePdfLiteral{#1}')
+  }%
 }
 
 \def\FarbeColor#1
