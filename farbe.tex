@@ -34,7 +34,16 @@
 
 \def\FarbeColor#1
 {%
-  \directlua{farbe.Color('#1'):write_pdf_colorstack_node()}%
+  \directlua{farbe.Color('#1'):write_pdf_colorstack_node('push')}%
+}
+
+\def\FarbeTextColor#1#2
+{%
+  \protect\leavevmode{%
+  \directlua{farbe.Color('#1'):write_pdf_colorstack_node('push')}%
+  #2%
+  \directlua{farbe.Color('#1'):write_pdf_colorstack_node('pop')}%
+  }
 }
 
 \def\FarbeBox#1
