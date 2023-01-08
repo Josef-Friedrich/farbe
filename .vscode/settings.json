@@ -22,5 +22,6 @@
     "${3rd}/luaassert/library",
     // https://github.com/Josef-Friedrich/LuaTeX_Lua-API
     "~/repos/tex/lua-api/library"
-  ]
+  ],
+  "latex-workshop.latex.autoBuild.run": "never"
 }
