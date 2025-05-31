@@ -62,24 +62,14 @@
 
 Color management (conversion, names) for Lua\TeX implemented in Lua.
 
-Based on \url{https://luarocks.org/modules/Firanel/lua-color}
+\emph{farbe} is mainly a Lua library for converting and manipulating
+colors. It is based on Lua module
+\href{https://luarocks.org/modules/Firanel/lua-color}{lua-color}.
 
 % CTAN stellt eine Übersichtsseite zum Thema bereit.
 CTAN provides an overview page on the subject of
 \href{https://www.ctan.org/topic/colour}
 {Colour: packages to typesetting in colour}.
-
-\section{base}
-
-\directlua{farbe.print_color_table('base')}
-
-\section{svg}
-
-\directlua{farbe.print_color_table('svg')}
-
-\section{x11}
-
-\directlua{farbe.print_color_table('x11')}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -208,6 +198,23 @@ Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJI
 \paragraph{Color:isColor (color)}
 
 Check whether color is a Color.
+
+\clearpage
+
+\section{Color names}
+
+\subsection{base}
+
+\directlua{farbe.print_color_table('base')}
+
+\subsection{svg}
+
+\directlua{farbe.print_color_table('svg')}
+
+\subsection{x11}
+
+\directlua{farbe.print_color_table('x11')}
+
 
 \clearpage
 

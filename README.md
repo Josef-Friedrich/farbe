@@ -1,8 +1,10 @@
 # farbe
 
-Color management (conversion, names) for LuaTeX implemented in Lua.
+Color management (conversion, names) for [LuaTeX](https://www.luatex.org) implemented in [Lua](https://www.lua.org/).
 
-Based on https://luarocks.org/modules/Firanel/lua-color
+`farbe` is mainly a Lua library for converting and manipulating
+colors. It is based on Lua module
+[lua-color](https://luarocks.org/modules/Firanel/lua-color).
 
 Color related Lua code in texlive:
 
