@@ -1,5 +1,5 @@
 -- farbe.lua
--- Copyright 2022 Josef Friedrich
+-- Copyright 2025 Josef Friedrich
 --
 -- This work may be distributed and/or modified under the
 -- conditions of the LaTeX Project Public License, either version 1.3c
