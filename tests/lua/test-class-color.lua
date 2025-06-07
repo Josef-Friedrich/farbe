@@ -31,7 +31,9 @@ describe('Class “Color”', function()
         assert.is.equal(Color('rgb(255, 255, 255)'), white)
       end)
 
-      it('rgba(r, g, b, a)', function() end)
+      it('rgba(r, g, b, a)', function()
+        assert.is.equal(Color('rgba(0,0,0,0)'), Color('#0000'))
+      end)
 
       it('hsl(h, s, l)', function() end)
 
@@ -52,6 +54,56 @@ describe('Class “Color”', function()
         assert.is.equal(Color('cmyk(0, 0, 0, 0)'), white)
         assert.is.equal(Color('cmyk(0, 1, 1, 0)'), red)
         assert.is.equal(Color('cmyk(0, 1, 0, 0)'), magenta)
+      end)
+    end)
+
+    describe('hex string', function()
+      it('#rgb', function()
+        assert.is.equal(Color('#aaa'), Color('rgb(170, 170, 170)'))
+      end)
+
+      it('#RGB', function()
+        assert.is.equal(Color('#BBB'), Color('rgb(187, 187, 187)'))
+      end)
+
+      it('rgb', function()
+        assert.is.equal(Color('ccc'), Color('rgb(204, 204, 204)'))
+      end)
+
+      it('#rgba', function()
+        assert.is.equal(Color('#aaac'), Color('rgba(170, 170, 170, 0.8)'))
+      end)
+
+      it('#RGBA', function()
+        assert.is.equal(Color('#BBBF'), Color('rgba(187, 187, 187, 1)'))
+      end)
+
+      it('rgba', function()
+        assert.is.equal(Color('cccc'), Color('rgba(204, 204, 204, 0.8)'))
+      end)
+
+      it('#rrggbb', function()
+        assert.is.equal(Color('#aaaaaa'), Color('rgb(170, 170, 170)'))
+      end)
+
+      it('#RRGGBB', function()
+        assert.is.equal(Color('#BBBBBB'), Color('rgb(187, 187, 187)'))
+      end)
+
+      it('rrggbb', function()
+        assert.is.equal(Color('cccccc'), Color('rgb(204, 204, 204)'))
+      end)
+
+      it('#rrggbbaa', function()
+        assert.is.equal(Color('#aaaaaacc'), Color('rgba(170, 170, 170, 0.8)'))
+      end)
+
+      it('#RRGGBBAA', function()
+        assert.is.equal(Color('#BBBBBBFF'), Color('rgba(187, 187, 187, 1)'))
+      end)
+
+      it('rrggbbaa', function()
+        assert.is.equal(Color('cccccccc'), Color('rgba(204, 204, 204, 0.8)'))
       end)
     end)
 
