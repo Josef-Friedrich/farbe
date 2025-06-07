@@ -575,7 +575,10 @@ local colors = {
   white = { 1, 1, 1 },
   yellow = { 1, 1, 0 },
 
-  -- svg
+  ---svg
+  ---https://www.w3.org/TR/2003/REC-SVG11-20030114/types.html#ColorKeywords
+  ---https://www.w3.org/TR/css-color-3/#svg-color
+  ---https://github.com/latex3/xcolor/blob/c5035d41c6070f4e8936196a994ad04336704872/xcolor.dtx#L7134-L7286
   AliceBlue = { 0.94, 0.972, 0.972 },
   AntiqueWhite = { 0.98, 0.92, 0.92 },
   Aqua = { 0, 1, 1 },
@@ -729,6 +732,9 @@ local colors = {
   YellowGreen = { 0.604, 0.804, 0.804 },
 
   ---x11
+  ---https://en.wikipedia.org/wiki/X11_color_names
+  ---https://gitlab.freedesktop.org/xorg/app/rgb/raw/master/rgb.txt
+  ---https://github.com/latex3/xcolor/blob/c5035d41c6070f4e8936196a994ad04336704872/xcolor.dtx#L7289-L7607
   AntiqueWhite1 = { 1, 0.936, 0.936 },
   AntiqueWhite2 = { 0.932, 0.875, 0.875 },
   AntiqueWhite3 = { 0.804, 0.752, 0.752 },
