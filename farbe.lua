@@ -2480,6 +2480,8 @@ local Color = (function()
 end)()
 
 ---
+---
+---
 ---@param scheme 'base'|'svg'|'x11'
 local function print_color_table(scheme)
   for _, name in pairs(schemes[scheme]) do
@@ -2489,8 +2491,8 @@ local function print_color_table(scheme)
     local g = utils.round(color[2] * 255)
     local b = utils.round(color[3] * 255)
     tex.print('\\par\\noindent')
-    tex.print(string.format('\\FarbeBox{rgba(%d, %d, %d, 1}', r, g, b))
-    tex.print('\\quad{}' .. name)
+    tex.print(string.format('\\FarbeBox{rgb(%d, %d, %d} ', r, g, b))
+    tex.print('\\texttt{\\tiny\\enspace ' .. name .. '}')
   end
 end
 
