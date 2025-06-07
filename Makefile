@@ -11,6 +11,9 @@ install:
 	cp -f $(jobname).sty $(installdir)/
 	cp -f $(jobname).lua $(installdir)/
 
+install_busted:
+	sudo luarocks install busted
+
 test: install test_lua
 
 test_lua:
