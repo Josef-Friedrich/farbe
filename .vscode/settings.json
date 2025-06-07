@@ -21,5 +21,8 @@
     "${3rd}/luaassert/library",
     "~/repos/tex/lua-api/library"
   ],
-  "latex-workshop.latex.autoBuild.run": "never"
+  "latex-workshop.latex.autoBuild.run": "never",
+  "[lua]": {
+    "editor.defaultFormatter": "Koihik.vscode-lua-format"
+  },
 }
