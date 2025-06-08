@@ -1489,6 +1489,10 @@ local Color = (function()
     return r + m, g + m, b + m
   end
 
+  ---
+  ---@param str string A number encoded as a string with an optional percent sign.
+  ---
+  ---@return number result A number from 0 - 1
   local function tonumPercent(str)
     if str:sub(-1) == '%' then
       return tonumber(str:sub(1, #str - 1)) / 100
@@ -2430,7 +2434,7 @@ local Color = (function()
   end
 
   ---Format a PDF colorstack string. This string can be assigned to the
-  ---`node.data` field of a PDF colorstock node.
+  ---`node.data` field of a PDF colorstack node.
   ---
   ---@return string # A string like this example `1 0 0 rg 1 0 0 RG`
   function Color:format_pdf_colorstack_string()

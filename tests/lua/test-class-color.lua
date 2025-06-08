@@ -23,7 +23,6 @@ describe('Class “Color”', function()
       assert.is.equal(color.a, 1.0)
     end)
 
-
     describe('css style functions as string', function()
       it('rgb(r, g, b)', function()
         assert.is.equal(Color('rgb(0,0,0)'), black)
@@ -35,17 +34,47 @@ describe('Class “Color”', function()
         assert.is.equal(Color('rgba(0,0,0,0)'), Color('#0000'))
       end)
 
-      it('hsl(h, s, l)', function() end)
+      it('hsl(h, s, l)', function()
+        assert.is.equal(Color('hsl(0,100%,50%)'), red)
+        assert.is.equal(Color('hsl(240,100%,50%)'), blue)
+        assert.is.equal(Color('hsl(180,100%,50%)'), cyan)
+      end)
 
-      it('hsla(h, s, l, a)', function() end)
+      it('hsla(h, s, l, a)', function()
+        assert.is.equal(Color('hsla(0,100%,50%,80%)'), Color('#f00c'))
+        assert.is.equal(Color('hsla(240,100%,50%,0.8)'), Color('#00fc'))
+        assert.is.equal(Color('hsla(180, 1, 0.5, 0.8)'), Color('#0ffc'))
+      end)
 
-      it('hsv(h, s, v)', function() end)
+      it('hsv(h, s, v)', function()
+        assert.is.equal(Color('hsv(0,100%,100%)'), red)
+        assert.is.equal(Color('hsv(240,100%,100%)'), blue)
+        assert.is.equal(Color('hsv(180,100%,100%)'), cyan)
+        assert.is.equal(Color('hsv(60,100%,100%)'), yellow)
+        assert.is.equal(Color('hsv(120,100%,100%)'), green)
+      end)
 
-      it('hsva(h, s, v, a)', function() end)
+      it('hsva(h, s, v, a)', function()
+        assert.is.equal(Color('hsva(0,100%,100%,0.8)'), Color('#f00c'))
+        assert.is
+          .equal(Color('hsva(240,100%,100%,80%)'), Color('#00fc'))
+        assert.is
+          .equal(Color('hsva(180,100%,100%,80%)'), Color('#0ffc'))
+      end)
 
-      it('hwb(h, w, b)', function() end)
+      it('hwb(h, w, b)', function()
+        assert.is.equal(Color('hwb(0,0,0)'), red)
+        assert.is.equal(Color('hwb(240,0%,0%)'), blue)
+        assert.is.equal(Color('hwb(180,0,0)'), cyan)
+      end)
 
-      it('hwba(h, w, b, a)', function() end)
+      it('hwba(h, w, b, a)', function()
+        assert.is.equal(Color('hwba(0,0%,0%,0.8)'), Color('#f00c'))
+        assert.is
+          .equal(Color('hwba(240,0%,0%,80%)'), Color('#00fc'))
+        assert.is
+          .equal(Color('hwba(180,0%,0%,80%)'), Color('#0ffc'))
+      end)
 
       it('cmyk(c, m, y, k)', function()
         assert.is.equal(Color('cmyk(100%, 100%, 100%, 100%)'), black)
@@ -71,7 +100,8 @@ describe('Class “Color”', function()
       end)
 
       it('#rgba', function()
-        assert.is.equal(Color('#aaac'), Color('rgba(170, 170, 170, 0.8)'))
+        assert.is.equal(Color('#aaac'),
+          Color('rgba(170, 170, 170, 0.8)'))
       end)
 
       it('#RGBA', function()
@@ -79,7 +109,8 @@ describe('Class “Color”', function()
       end)
 
       it('rgba', function()
-        assert.is.equal(Color('cccc'), Color('rgba(204, 204, 204, 0.8)'))
+        assert.is
+          .equal(Color('cccc'), Color('rgba(204, 204, 204, 0.8)'))
       end)
 
       it('#rrggbb', function()
@@ -95,15 +126,18 @@ describe('Class “Color”', function()
       end)
 
       it('#rrggbbaa', function()
-        assert.is.equal(Color('#aaaaaacc'), Color('rgba(170, 170, 170, 0.8)'))
+        assert.is.equal(Color('#aaaaaacc'),
+          Color('rgba(170, 170, 170, 0.8)'))
       end)
 
       it('#RRGGBBAA', function()
-        assert.is.equal(Color('#BBBBBBFF'), Color('rgba(187, 187, 187, 1)'))
+        assert.is.equal(Color('#BBBBBBFF'),
+          Color('rgba(187, 187, 187, 1)'))
       end)
 
       it('rrggbbaa', function()
-        assert.is.equal(Color('cccccccc'), Color('rgba(204, 204, 204, 0.8)'))
+        assert.is.equal(Color('cccccccc'),
+          Color('rgba(204, 204, 204, 0.8)'))
       end)
     end)
 
@@ -112,8 +146,6 @@ describe('Class “Color”', function()
       assert.is.equal(Color('white'), white)
     end)
   end)
-
-
 
   it('Method cmyk()', function()
     local color = Color('#000000')
