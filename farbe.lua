@@ -2569,9 +2569,24 @@ local function import_color(name, operator)
   end
 end
 
+---
+---Import all LaTeX color definitions.
+---
+---color’s `\definecolor{foo}{...}{...}` generates a command `\\color@foo`
+---which contains the color definition in a driver-dependent way;
+local function import_all_colors()
+  for _, t in pairs(tex.hashtokens()) do
+    if t:find('^\\color@') ~= nil then
+        local name = t:sub(8)
+        tex.print('\\FarbeImportNewName{' .. name .. '}{' .. name .. 'Imported}')
+    end
+  end
+end
+
 return {
   convert = convert,
   Color = Color --[[@as Color]] ,
   print_color_table = print_color_table,
   import_color = import_color,
+  import_all_colors = import_all_colors,
 }

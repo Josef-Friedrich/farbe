@@ -6,6 +6,7 @@ installdir = $(texmftex)/$(jobname)
 all: install
 
 install:
+	-tlmgr remove --force $(jobname)
 	mkdir -p $(installdir)
 	cp -f $(jobname).tex $(installdir)/
 	cp -f $(jobname).sty $(installdir)/

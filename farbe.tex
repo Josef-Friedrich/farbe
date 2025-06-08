@@ -32,6 +32,20 @@
   }%
 }
 
+\def\FarbeImportNewName#1#2{%
+  \directlua
+  {
+    farbe.import_color('#2', '\FarbePdfLiteral{#1}')
+  }%
+}
+
+\def\FarbeImportAll{%
+  \directlua
+  {
+    farbe.import_all_colors()
+  }%
+}
+
 \def\FarbeColor#1
 {%
   \directlua{farbe.Color('#1'):write_pdf_colorstack_node('push')}%
