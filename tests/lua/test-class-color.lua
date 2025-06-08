@@ -70,10 +70,8 @@ describe('Class “Color”', function()
 
       it('hwba(h, w, b, a)', function()
         assert.is.equal(Color('hwba(0,0%,0%,0.8)'), Color('#f00c'))
-        assert.is
-          .equal(Color('hwba(240,0%,0%,80%)'), Color('#00fc'))
-        assert.is
-          .equal(Color('hwba(180,0%,0%,80%)'), Color('#0ffc'))
+        assert.is.equal(Color('hwba(240,0%,0%,80%)'), Color('#00fc'))
+        assert.is.equal(Color('hwba(180,0%,0%,80%)'), Color('#0ffc'))
       end)
 
       it('cmyk(c, m, y, k)', function()
@@ -84,6 +82,50 @@ describe('Class “Color”', function()
         assert.is.equal(Color('cmyk(0, 1, 1, 0)'), red)
         assert.is.equal(Color('cmyk(0, 1, 0, 0)'), magenta)
       end)
+
+      describe('Simplified syntax', function()
+        it('rgb', function()
+          assert.is.equal(Color('rgb 0 0 0'), black)
+        end)
+
+        it('rgba', function()
+          assert.is.equal(Color('rgba 0 0 0 0'), Color('#0000'))
+        end)
+
+        it('hsl', function()
+          assert.is.equal(Color('hsl 0 100% 50%'), red)
+        end)
+
+        it('hsla', function()
+          assert.is.equal(Color('hsla 0 100% 50% 80%'), Color('#f00c'))
+        end)
+
+        it('hsv', function()
+          assert.is.equal(Color('hsv 0 100% 100%'), red)
+        end)
+
+        it('hsva', function()
+          assert.is.equal(Color('hsva 0 100% 100% 0.8'), Color('#f00c'))
+        end)
+
+        it('hwb', function()
+          assert.is.equal(Color('hwb 0 0 0'), red)
+        end)
+
+        it('hwba', function()
+          assert.is.equal(Color('hwba 0 0% 0% 0.8'), Color('#f00c'))
+        end)
+
+        it('cmyk', function()
+          assert.is.equal(Color('cmyk 100% 100% 100% 100%'), black)
+        end)
+      end)
+    end)
+
+    it('NCol', function()
+      assert.is.equal(Color('B0, 0%, 0%'), blue)
+      assert.is.equal(Color('Y, 0, 0'), yellow)
+      assert.is.equal(Color('R, 0, 0'), red)
     end)
 
     describe('hex string', function()
