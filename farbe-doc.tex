@@ -253,11 +253,55 @@ This is not green. \FarbeTextColor{green}{This is green.} This is not green.
 
 \subsection{svg}
 
+This svg color names are taken from the
+\href{https://github.com/latex3/xcolor/blob/c5035d41c6070f4e8936196a994ad04336704872/xcolor.dtx#L7134-L7286}{xcolor}
+package.
+
+\def\TmpColor#1{\texttt{#1}}
+
+% https://github.com/latex3/xcolor/blob/c5035d41c6070f4e8936196a994ad04336704872/xcolor.dtx#L2105-L2127
+{
+\footnotesize\raggedright Duplicate colors:
+\TmpColor{Aqua} = \TmpColor{Cyan},
+\TmpColor{Fuchsia} = \TmpColor{Magenta};
+\TmpColor{Navy} = \TmpColor{NavyBlue};
+\TmpColor{Gray} = \TmpColor{Grey},
+\TmpColor{DarkGray} = \TmpColor{DarkGrey},
+\TmpColor{LightGray} = \TmpColor{LightGrey},
+\TmpColor{SlateGray} = \TmpColor{SlateGrey},
+\TmpColor{DarkSlateGray} = \TmpColor{DarkSlateGrey},
+\TmpColor{LightSlateGray} = \TmpColor{LightSlateGrey},
+\TmpColor{DimGray} = \TmpColor{DimGrey}.
+\par\smallskip
+HTML4 color keyword subset:
+\TmpColor{Aqua}, \TmpColor{Black}, \TmpColor{Blue}, \TmpColor{Fuchsia},
+\TmpColor{Gray}, \TmpColor{Green}, \TmpColor{Lime}, \TmpColor{Maroon},
+\TmpColor{Navy}, \TmpColor{Olive}, \TmpColor{Purple}, \TmpColor{Red},
+\TmpColor{Silver}, \TmpColor{Teal}, \TmpColor{White}, \TmpColor{Yellow}.
+\par\smallskip
+Colors taken from Unix/X11:
+\TmpColor{LightGoldenrod},
+\TmpColor{LightSlateBlue},
+\TmpColor{NavyBlue},
+\TmpColor{VioletRed}.
+}
+
 \begin{multicols}{4}
 \directlua{farbe.print_color_table('svg')}
 \end{multicols}
 
 \subsection{x11}
+
+This x11 color names are taken from the
+\href{https://github.com/latex3/xcolor/blob/c5035d41c6070f4e8936196a994ad04336704872/xcolor.dtx#L7289-L7607}{xcolor}
+package.
+
+% https://github.com/latex3/xcolor/blob/c5035d41c6070f4e8936196a994ad04336704872/xcolor.dtx#L2133-L2135
+{
+\footnotesize\raggedright Duplicate colors:
+\TmpColor{Gray0} = \TmpColor{Grey0,},
+\TmpColor{Green0} = \TmpColor{Green1.}.
+}
 
 \begin{multicols}{4}
 \directlua{farbe.print_color_table('x11')}

@@ -651,7 +651,7 @@ local colors = {
   LightBlue = { .68, .848, .9 },
   LightCoral = { .94, .5, .5 },
   LightCyan = { .88, 1, 1 },
-  LightGoldenrod = { .933, .867, .51 },
+  LightGoldenrod = { .933, .867, .51 }, -- Colors taken from Unix/X11
   LightGoldenrodYellow = { .98, .98, .824 },
   LightGray = { .828, .828, .828 },
   LightGreen = { .565, .932, .565 },
@@ -660,7 +660,7 @@ local colors = {
   LightSalmon = { 1, .628, .48 },
   LightSeaGreen = { .125, .698, .668 },
   LightSkyBlue = { .53, .808, .98 },
-  LightSlateBlue = { .518, .44, 1 },
+  LightSlateBlue = { .518, .44, 1 }, -- Colors taken from Unix/X11
   LightSlateGray = { .468, .532, .6 },
   LightSlateGrey = { .468, .532, .6 },
   LightSteelBlue = { .69, .77, .87 },
@@ -685,7 +685,7 @@ local colors = {
   Moccasin = { 1, .894, .71 },
   NavajoWhite = { 1, .87, .68 },
   Navy = { 0, 0, .5 },
-  NavyBlue = { 0, 0, .5 },
+  NavyBlue = { 0, 0, .5 }, -- Colors taken from Unix/X11
   OldLace = { .992, .96, .9 },
   Olive = { .5, .5, 0 },
   OliveDrab = { .42, .556, .136 },
@@ -726,7 +726,7 @@ local colors = {
   Tomato = { 1, .39, .28 },
   Turquoise = { .25, .88, .815 },
   Violet = { .932, .51, .932 },
-  VioletRed = { .816, .125, .565 },
+  VioletRed = { .816, .125, .565 }, -- Colors taken from Unix/X11
   Wheat = { .96, .87, .7 },
   White = { 1, 1, 1 },
   WhiteSmoke = { .96, .96, .96 },
@@ -1055,7 +1055,6 @@ local colors = {
   Grey0 = { .745, .745, .745 },
   Maroon0 = { .69, .19, .376 },
   Purple0 = { .628, .125, .94 },
-
 }
 
 --- https://luarocks.org/modules/Firanel/lua-color
