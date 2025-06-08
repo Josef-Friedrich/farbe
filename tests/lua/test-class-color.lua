@@ -197,4 +197,13 @@ describe('Class “Color”', function()
     assert.is.equal(y, 0.0)
     assert.is.equal(k, 1.0)
   end)
+
+  it('Method totable()', function()
+    assert.are.same(
+      Color({ r = 0.1, g = 0.2, b = 0.3, a = 0.4 }):totable(),
+      { 0.1, 0.2, 0.3, 0.4 })
+
+    assert.are.same(Color({ r = 0.1, g = 0.2, b = 0.3 }):totable(),
+      { 0.1, 0.2, 0.3 })
+  end)
 end)

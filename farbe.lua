@@ -1622,7 +1622,10 @@ local Color = (function()
           self.r = c[1]
           self.g = c[2]
           self.b = c[3]
-          return
+          if #c == 4 then
+            self.a = c[4]
+          end
+          return self
         end
 
         local func, values = value:match '(%w+)[ %(]+([x ,.%x%%]+)'
@@ -2268,6 +2271,20 @@ local Color = (function()
     return tostring(self)
   end
 
+  ---Get the color as a table.
+  ---
+  ---If the alpha channel is less than 1, a table with 4 entries is
+  ---returned, otherwise a table with 3 entries is returned
+  ---
+  ---@return table
+  function Color:totable()
+    if self.a == 1 then
+      return { self.r, self.g, self.b }
+    else
+      return { self.r, self.g, self.b, self.a }
+    end
+  end
+
   ---Get color in rgb hex notation.
   -- <br>
   -- only adds alpha value if `color.a < 1`
@@ -2577,8 +2594,9 @@ end
 local function import_all_colors()
   for _, t in pairs(tex.hashtokens()) do
     if t:find('^\\color@') ~= nil then
-        local name = t:sub(8)
-        tex.print('\\FarbeImportNewName{' .. name .. '}{' .. name .. 'Imported}')
+      local name = t:sub(8)
+      tex.print('\\FarbeImportNewName{' .. name .. '}{' .. name ..
+                  'Imported}')
     end
   end
 end
