@@ -199,6 +199,48 @@ Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJI
 
 Check whether color is a Color.
 
+\section{\TeX{} interface}
+
+\begin{minted}{latex}
+\documentclass{article}
+\usepackage{color}
+\usepackage{farbe}
+\begin{document}
+\definecolor{my-test-color}{rgb}{.2,0.85,1}
+
+% Not a valid color: my-test-color
+% \FarbeTextColor{my-test-color}{This text is set in my test color.}
+
+\FarbeImport{my-test-color}
+
+\FarbeTextColor{my-test-color}{This text is set in my test color.}
+\end{document}
+\end{minted}
+
+\begin{macro}{\FarbePdfLiteral}
+
+\end{macro}
+
+\begin{macro}{\FarbeColor}
+\begin{macro}{\FarbeColorEnd}
+\begin{minted}{latex}
+This is not green.
+\FarbeColor{green} This is green. It's still green.
+\FarbeColorEnd It's not green.
+\end{minted}
+\end{macro}
+\end{macro}
+
+\begin{macro}{\FarbeTextColor}
+\begin{minted}{latex}
+This is not green. \FarbeTextColor{green}{This is green.} This is not green.
+\end{minted}
+\end{macro}
+
+\begin{macro}{\FarbeBox}
+
+\end{macro}
+
 \clearpage
 
 \section{Color names}

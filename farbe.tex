@@ -37,6 +37,11 @@
   \directlua{farbe.Color('#1'):write_pdf_colorstack_node('push')}%
 }
 
+\def\FarbeColorEnd
+{%
+  \directlua{farbe.Color('000'):write_pdf_colorstack_node('pop')}%
+}
+
 \def\FarbeTextColor#1#2
 {%
   \protect\leavevmode{%
