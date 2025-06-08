@@ -15,7 +15,7 @@ Color related Lua code in texlive:
 
 ## Current version
 
-2025/05/31 v0.1.0
+2025/06/08 v0.2.0
 
 ## License
 
