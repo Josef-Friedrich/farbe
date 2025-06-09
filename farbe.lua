@@ -1448,7 +1448,6 @@ end)()
 ---@field a number # Alpha component.
 ---
 ---@function Color:__call
----
 ---@param value Color string|table|Color value (default: `nil`)
 ---
 ---@see Color:set
@@ -1505,7 +1504,7 @@ local Color = (function()
   ---
   -- @function Color:__call
   ---
-  ---@param ?string|table|Color value Color value (default: `nil`)
+  ---@param value? string|table|Color  Color value (default: `nil`)
   ---
   ---@see Color:set
 
@@ -2013,7 +2012,7 @@ local Color = (function()
 
   ---Rotate hue of color.
   ---
-  ---@param number[0;1]|table value Part of full turn or table containing degree or radians
+  ---@param value number|table Part of full turn or table containing degree or radians
   ---
   ---@return Color self
   ---
@@ -2060,7 +2059,7 @@ local Color = (function()
 
   ---Set to black or white depending on lightness.
   ---
-  ---@param ?number[0;1] lightness Cutoff point (Default: 0.5)
+  ---@param lightness? number [0;1] lightness Cutoff point (Default: 0.5)
   ---
   ---@return Color self
   function Color:blackOrWhite(lightness)
@@ -2074,8 +2073,8 @@ local Color = (function()
 
   ---Mix two colors together.
   ---
-  ---@param Color other
-  ---@param ?number strength 0 results in self, 1 results in other (Default: 0.5)
+  ---@param other Color
+  ---@param strength? number 0 results in self, 1 results in other (Default: 0.5)
   ---
   ---@return Color self
   function Color:mix(other, strength)
@@ -2147,10 +2146,10 @@ local Color = (function()
   -- <br>
   -- Generalization of `triad` and `tetrad`.
   ---
-  ---@param int     n Return n colors
-  ---@param ?number r Space colors over r rotations (Default: 1)
+  ---@param n integer Return n colors
+  ---@param r? number Space colors over r rotations (Default: 1)
   ---
-  ---@return {Color,...} Table with n colors including self at index 1
+  ---@return table<integer, Color> colors Table with n colors including self at index 1
   function Color:evenlySpaced(n, r)
     assert(n > 0, 'n needs to be greater than 0')
     r = r or 1
@@ -2173,7 +2172,7 @@ local Color = (function()
   ---
   -- If `format` is `nil`, `color:tostring()` is the same as `tostring(color)`.
   ---
-  ---@param ?string format One of: `#fff`, `#ffff`, `#ffffff`, `#ffffffff`,
+  ---@param format? string One of: `#fff`, `#ffff`, `#ffffff`, `#ffffffff`,
   --  rgb, rgba, hsv, hsva, hsl, hsla, hwb, hwba, ncol, cmyk
   ---
   ---@return string
@@ -2305,7 +2304,7 @@ local Color = (function()
 
   ---Check if colors are equal.
   ---
-  ---@param Color other
+  ---@param other Color
   ---
   ---@return boolean all values are equal
   function Color:__eq(other)
@@ -2316,7 +2315,7 @@ local Color = (function()
 
   ---Checks whether color is darker.
   ---
-  ---@param Color other
+  ---@param other Color
   ---
   ---@return boolean self is darker than other
   function Color:__lt(other)
@@ -2327,7 +2326,7 @@ local Color = (function()
 
   ---Checks whether color is as dark or darker.
   ---
-  ---@param Color other
+  ---@param other Color
   ---
   ---@return boolean self is as dark or darker than other
   function Color:__le(other)
@@ -2364,8 +2363,8 @@ local Color = (function()
 
   ---Mix two colors evenly.
   ---
-  ---@param Color a first color
-  ---@param Color b second color
+  ---@param a Color first color
+  ---@param b Color second color
   ---
   ---@return Color new color
   ---
@@ -2378,8 +2377,8 @@ local Color = (function()
 
   ---Complement of even mix.
   ---
-  ---@param Color a first color
-  ---@param Color b second color
+  ---@param a Color first color
+  ---@param b Color second color
   ---
   ---@return Color new color
   ---
@@ -2393,8 +2392,8 @@ local Color = (function()
 
   ---Apply rgb mask to color.
   ---
-  ---@param Color|number a color or mask
-  ---@param Color|number b color or mask (if a and b are colors b is used as mask)
+  ---@param a Color|number color or mask
+  ---@param b Color|number color or mask (if a and b are colors b is used as mask)
   ---
   ---@return Color new color
   ---
