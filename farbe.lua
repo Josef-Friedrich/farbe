@@ -2588,8 +2588,9 @@ end
 ---
 ---Import all LaTeX color definitions.
 ---
----color’s `\definecolor{foo}{...}{...}` generates a command `\\color@foo`
----which contains the color definition in a driver-dependent way;
+---The command `\definecolor{foo}{...}{...}` of the color package
+---generates a command `\\color@foo`, which contains the color
+---definition in a driver-dependent manner.
 local function import_all_colors()
   for _, t in pairs(tex.hashtokens()) do
     if t:find('^\\color@') ~= nil then
