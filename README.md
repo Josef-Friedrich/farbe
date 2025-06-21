@@ -34,3 +34,31 @@ version 2008/05/04 or later.
 ## Maintainer
 
 Josef Friedrich <josef@friedrich.rocks>
+
+## Packaging
+
+### CTAN
+
+The `farbe` package has been included in the Comprehensive TeX Archive
+Network (CTAN) since June 2025.
+
+* [Package page](https://www.ctan.org/pkg/farbe)
+* [Sources](https://www.ctan.org/tex-archive/macros/luatex/generic/farbe)
+
+### Distributions
+
+* TeX Live:
+  * run files:
+    * [tex/luatex/farbe/farbe.lua](https://tug.org/svn/texlive/trunk/Master/texmf-dist/tex/luatex/farbe/farbe.lua)
+    * [tex/luatex/farbe/farbe.tex](https://tug.org/svn/texlive/trunk/Master/texmf-dist/tex/luatex/farbe/farbe.tex)
+    * [tex/luatex/farbe/farbe.sty](https://tug.org/svn/texlive/trunk/Master/texmf-dist/tex/luatex/farbe/farbe.sty)
+  * doc files:
+    * [doc/luatex/farbe/farbe-doc.tex](https://tug.org/svn/texlive/trunk/Master/texmf-dist/doc/luatex/farbe/farbe-doc.tex)
+    * [doc/luatex/farbe/farbe-doc.pdf](https://tug.org/svn/texlive/trunk/Master/texmf-dist/doc/luatex/farbe/farbe-doc.pdf)
+* [MiKTeX](https://miktex.org/packages/farbe)
+
+### Repository
+
+The [Git repository](https://github.com/Josef-Friedrich/farbe) in
+which the development takes place is hosted on
+[GitHub](https://github.com).
