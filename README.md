@@ -55,6 +55,7 @@ Network (CTAN) since June 2025.
   * doc files:
     * [doc/luatex/farbe/farbe-doc.tex](https://tug.org/svn/texlive/trunk/Master/texmf-dist/doc/luatex/farbe/farbe-doc.tex)
     * [doc/luatex/farbe/farbe-doc.pdf](https://tug.org/svn/texlive/trunk/Master/texmf-dist/doc/luatex/farbe/farbe-doc.pdf)
+    * [doc/luatex/farbe/README.md](https://tug.org/svn/texlive/trunk/Master/texmf-dist/doc/luatex/farbe/README.md)
 * [MiKTeX](https://miktex.org/packages/farbe)
 
 ### Repository
