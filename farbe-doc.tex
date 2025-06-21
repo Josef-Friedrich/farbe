@@ -99,47 +99,47 @@ Alpha component.
 
 \subsubsection{Methods}
 
-\paragraph{Color:clone ()}
+\paragraph{Color:clone()}
 
 Clone color
 
-\paragraph{Color:set (value)}
+\paragraph{Color:set(value)}
 
 Set color to value.
 
-\paragraph{Color:rgb ()}
+\paragraph{Color:rgb()}
 
 Get rgb values.
 
-\paragraph{Color:rgba ()}
+\paragraph{Color:rgba()}
 
 Get rgba values.
 
-\paragraph{Color:hsv ()}
+\paragraph{Color:hsv()}
 
 Get hsv values.
 
-\paragraph{Color:hsva ()}
+\paragraph{Color:hsva()}
 
 Get hsv values.
 
-\paragraph{Color:hsl ()}
+\paragraph{Color:hsl()}
 
 Get hsl values.
 
-\paragraph{Color:hsla ()}
+\paragraph{Color:hsla()}
 
 Get hsl values.
 
-\paragraph{Color:hwb ()}
+\paragraph{Color:hwb()}
 
 Get hwb values.
 
-\paragraph{Color:hwba ()}
+\paragraph{Color:hwba()}
 
 Get hwb values.
 
-\paragraph{Color:cmyk ()}
+\paragraph{Color:cmyk()}
 
 Get cmyk values.
 
@@ -155,51 +155,61 @@ Invert the color.
 
 Reduce saturation to 0.
 
-\paragraph{Color:blackOrWhite (lightness)}
+\paragraph{Color:blackOrWhite(lightness)}
 
 Set to black or white depending on lightness.
 
-\paragraph{Color:mix (other, strength)}
+\paragraph{Color:mix(other, strength)}
 
 Mix two colors together.
 
-\paragraph{Color:complement ()}
+\paragraph{Color:complement()}
 
 Generate complementary color.
 
-\paragraph{Color:analogous ()}
+\paragraph{Color:analogous()}
 
 Generate analogous color scheme.
 
-\paragraph{Color:triad ()}
+\paragraph{Color:triad()}
 
 Generate triadic color scheme.
 
-\paragraph{Color:tetrad ()}
+\paragraph{Color:tetrad()}
 
 Generate tetradic color scheme.
 
-\paragraph{Color:compound ()}
+\paragraph{Color:compound()}
 
 Generate compound color scheme.
 
-\paragraph{Color:evenlySpaced (n, r)}
+\paragraph{Color:evenlySpaced(n, r)}
 
 Generate evenly spaced color scheme.
 
-\paragraph{Color:tostring (format)}
+\paragraph{Color:tostring(format)}
 
 Get string representation of color.
 
-\paragraph{Color:band (a, b)}
+\paragraph{Color:band(a, b)}
 
 Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJIT 2.1.0-beta3
 
-\paragraph{Color:isColor (color)}
+\paragraph{Color:isColor(color)}
 
 Check whether color is a Color.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\TeX{} interface}
+
+\begin{macro}{\FarbeImport}
+% Der Befehl \cmd{\FarbeImport} importiert eine bestimmte
+% \LaTeX{}-Farbdefinition in das Lua-Modul von |farbe|.
+The \cmd{\FarbeImport} command imports one specific \LaTeX{} color
+definition into the Lua module of |farbe|.
 
 \begin{minted}{latex}
 \documentclass{article}
@@ -216,6 +226,20 @@ Check whether color is a Color.
 \FarbeTextColor{my-test-color}{This text is set in my test color.}
 \end{document}
 \end{minted}
+\end{macro}
+
+\begin{macro}{\FarbeImportAll}
+The \cmd{\FarbeImportAll} command imports all loaded \LaTeX{} color
+definitions into the Lua module of |farbe|.
+
+The command |\definecolor{foo}{...}{...} of the |color| package
+generates a command |\\color@foo|, which contains the color
+definition in a driver-dependent manner.
+% \FarbeImportAll durchsucht all Kommandos und die Kommandos, die mit
+% \\color@ beginnen, werden in den Speicher von |farbe| importiert.
+|\FarbeImportAll| searches all commands and the commands that begin with
+|\\color@| are imported into the color store of the |farbe| module
+\end{macro}
 
 \begin{macro}{\FarbePdfLiteral}
 
@@ -242,6 +266,10 @@ This is not green. \FarbeTextColor{green}{This is green.} This is not green.
 \end{macro}
 
 \clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Color names}
 
